@@ -24,8 +24,6 @@
 #include "clm_priv.h"
 
 extern DWORD CountsPerSec;
-static LARGE_INTEGER L1;
-static LARGE_INTEGER L2;
 
 #define NUM_ITER		10		// Default number of iterations.
 
@@ -33,9 +31,6 @@ static void DumpResponse(CvMat * r);
 
 int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final, CLM_OPTIONS *Options)
 {
-	auto& pShapeData = Model.ShapeModel;
-	auto& pTemplateData = Model.PatchModel;
-
 	// Prepare:
 	auto Inter = Initial;
 	Inter.xy = cvCloneMat(Initial.xy);
@@ -47,7 +42,6 @@ int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final,
 	// Do search:
 	float coeffs[8*100];
 	
-	int NumPatches = pTemplateData.NumPatches;
 	for(int iter = 0; iter < nIterations; iter++)
 	{
 		CLM_SvmSearch(&Inter, Model, Image, coeffs, Options);
