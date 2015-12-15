@@ -32,7 +32,7 @@ long FrameCount = 0;
 
 IplImage *OrigImg=0, *GrayImg=0, *DispImg = 0;
 
-extern void DrawFaceShape(IplImage *image, CvMat *xy);
+extern void DrawFaceShape(cv::Mat& image, CvMat *xy);
 
 
 FILE * fpout;
@@ -86,9 +86,6 @@ int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
 
 	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, &Si_Init);
 	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, &Si_Final);
-
-    //DrawFaceShape(searchimg, Si_Final.xy);
-    //cvShowImage( OutputWinName, searchimg );
     
     ////////////////////////
     // Do search with initial guess
@@ -102,7 +99,8 @@ int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
 	Options.SearchRegion[1] = 16;
 
    	ret = CLM_Search(CLM_Model, searchimg, &Si_Init, &Si_Final, &Options);
-	DrawFaceShape(input, Si_Final.xy);
+    cv::Mat input_(input);
+	DrawFaceShape(input_, Si_Final.xy);
 
     #if WRITE_VIDEO
     CvVideoWriter *writer = cvCreateVideoWriter("out.avi",-1,25,cvSize(720,576),1);
@@ -141,8 +139,8 @@ int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
         float time = (float)(L2.LowPart - L1.LowPart)*1000.0f/CountsPerSec;
         printf("Search time: %4.1f\n ", time);
 
-        
-		DrawFaceShape(DispImage, Si_Final.xy);
+        cv::Mat DispImage_(DispImage);
+		DrawFaceShape(DispImage_, Si_Final.xy);
 
         #if WRITE_VIDEO
         cvWriteFrame(writer,DispImage);

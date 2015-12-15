@@ -32,13 +32,13 @@ static int orNose[] = {37, 38, 39, 40, 46, 41, 47, 42, 43, 44, 45, 37};
 static int orMouth[] = {48, 59, 58, 57, 56, 55, 54, 53, 52, 50, 49, 48, 60, 61, 62, 63, 64, 65, 48};
 
 
-void DrawConnected(IplImage *image, float *pdat, int step, int *order, int cnt);
+void DrawConnected(cv::Mat& image, float *pdat, int step, int *order, int cnt);
 
-void DrawFaceShape(IplImage *image, CvMat *xy)
+void DrawFaceShape(cv::Mat& image, CvMat *xy)
 {
 	
 	// Draw face:
-	float *pdat =xy->data.fl;
+	auto pdat =xy->data.fl;
 	int step = xy->step/sizeof(float);
 	
 	DrawConnected(image, pdat, step, orFace, sizeof(orFace)/sizeof(int));
@@ -48,11 +48,10 @@ void DrawFaceShape(IplImage *image, CvMat *xy)
 	DrawConnected(image, pdat, step, orEyeR, sizeof(orEyeR)/sizeof(int));
 	DrawConnected(image, pdat, step, orNose, sizeof(orNose)/sizeof(int));
 	DrawConnected(image, pdat, step, orMouth, sizeof(orMouth)/sizeof(int));
-	
 }
 
 
-void DrawConnected(IplImage *image, float *pdat, int step, int *order, int cnt)
+void DrawConnected(cv::Mat& image, float *pdat, int step, int *order, int cnt)
 {
 	int i;
 
@@ -66,10 +65,9 @@ void DrawConnected(IplImage *image, float *pdat, int step, int *order, int cnt)
 		x1 = pdat[order[i+1]*2];
 		y1 = pdat[order[i+1]*2+ 1];
 
-		cvLine(image, cvPoint((int)x0, (int)y0), cvPoint((int)x1, (int)y1), CV_RGB(255, 0, 0), 1, 8);
-		cvCircle(image, cvPoint((int)x0, (int)y0), 1, CV_RGB(0, 255, 0), 2, 8, 0);
-		cvCircle(image, cvPoint((int)x1, (int)y1), 1, CV_RGB(0, 255, 0), 2, 8, 0);
+        cv::line(image, cvPoint((int)x0, (int)y0), cvPoint((int)x1, (int)y1), CV_RGB(255, 0, 0), 1, 8);
+        cv::circle(image, cvPoint((int)x0, (int)y0), 1, CV_RGB(0, 255, 0), 2, 8, 0);
+        cv::circle(image, cvPoint((int)x1, (int)y1), 1, CV_RGB(0, 255, 0), 2, 8, 0);
 	}
-
 }
 
