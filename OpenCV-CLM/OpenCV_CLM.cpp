@@ -45,9 +45,7 @@ FILE *fci;
 
 #define WRITE_VIDEO		0
 
-#define IMAGE_FILE_DIR   "D:\\Paul\\My Projects\\CLM Implementation\\FG-NET images\\all-images"
-
-int pic_vid_main(CLM_MODEL *CLM_Model)
+int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
 {
     int key=0;
 	int ret;
@@ -56,8 +54,7 @@ int pic_vid_main(CLM_MODEL *CLM_Model)
 	int x0 = 388, y0= 309;
 	int i=base;
 	char imgName[256];
-	char *DirName = IMAGE_FILE_DIR;
-	sprintf(imgName, "%s\\franck_%05d.jpg", DirName, base);
+	sprintf(imgName, "%s/franck_%05d.jpg", dirName, base);
 	
 	IplImage * input = cvLoadImage(imgName);
 
@@ -126,7 +123,7 @@ int pic_vid_main(CLM_MODEL *CLM_Model)
 	{
 		i++;
 		CLM_CopySi(&Si_Init, &Si_Final);
-		sprintf(imgName, "%s\\franck_%05d.jpg", DirName, i);
+		sprintf(imgName, "%s/franck_%05d.jpg", dirName, i);
 		input = cvLoadImage(imgName);
 		cvConvertImage(input,searchimg,0);
 		cvCopy(input, DispImage);
@@ -172,12 +169,13 @@ int pic_vid_main(CLM_MODEL *CLM_Model)
 }
 
 
-char *xmlFileName="CLMModel.xml";
-
 #include "omp.h"
 
-int main()
-{
+int main(int argc, char **argv) {
+    auto programDir = std::string(argv[0]);
+    auto resourceDir = programDir.substr(0, programDir.find_last_of("\\/"));
+    
+    auto xmlFileName= (resourceDir + "/CLMModel.xml").c_str();
 
 	omp_set_num_threads(CURRENT_NUM_THREADS);
 
@@ -200,9 +198,18 @@ int main()
 	
     /* create a window for the video */
     cvNamedWindow( OutputWinName, CV_WINDOW_AUTOSIZE );
-
-
-	pic_vid_main(&CLM_Model);
+    
+    /*
+     place the all-images directory
+     contains franck_00000.jpg ~ franck_01999.jpg
+     This can be get from:
+        First 1000 images
+        Second 1000 images
+        http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html
+     */
+    auto imagesDir = "/Users/ryohei/Desktop/all-images";
+    
+	pic_vid_main(&CLM_Model, imagesDir);
 
 	/* free memory */
     cvDestroyWindow( OutputWinName );

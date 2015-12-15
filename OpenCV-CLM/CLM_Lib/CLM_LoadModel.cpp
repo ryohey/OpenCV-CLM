@@ -29,7 +29,7 @@ static int ReadVecFromString(const char *str, float *f, int count);
 static int ReadMatFromString(const char *str, CvMat *Mat);
 
 
-int CLM_LoadModel(char *filename, CLM_MODEL *pModel)
+int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 {
 	
 	TiXmlDocument doc(filename);

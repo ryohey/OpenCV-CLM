@@ -34,7 +34,7 @@
 		F9561BD51C1FC50000F59699 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = Resources;
+			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
 				F9561C281C1FDD9700F59699 /* CLMModel.xml in CopyFiles */,
