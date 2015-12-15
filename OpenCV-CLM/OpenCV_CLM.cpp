@@ -56,9 +56,9 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 	char imgName[256];
 	sprintf(imgName, "%s/franck_%05d.jpg", dirName, base);
 	
-	IplImage * input = cvLoadImage(imgName);
-
-	if(input == 0)
+    cv::Mat input = cv::imread(imgName);
+    
+	if(input.empty())
 	{
 		printf("Cannot load file %s\n", imgName);
 		return 0;
@@ -69,10 +69,10 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
     //fweights = fopen("weights.txt", "w");
     //fcoeffs = fopen("coeffs.txt", "w");
 
-	IplImage *DispImage = cvCreateImage(cvSize(input->width, input->height), input->depth, input->nChannels);
-	IplImage *searchimg = cvCreateImage(cvSize(input->width, input->height), 8, 1);
-	
-    cvConvertImage(input,searchimg,0);
+    cv::Mat DispImage(input.rows, input.cols, input.depth(), input.channels());
+    cv::Mat searchimg;
+    
+    cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
 
     ///////////////////////////
     // Make initial values
@@ -98,8 +98,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 	Options.SearchRegion[1] = 16;
 
    	ret = CLM_Search(CLM_Model, searchimg, &Si_Init, &Si_Final, &Options);
-    cv::Mat input_(input);
-	DrawFaceShape(input_, Si_Final.xy);
+	DrawFaceShape(input, Si_Final.xy);
 
     #if WRITE_VIDEO
     CvVideoWriter *writer = cvCreateVideoWriter("out.avi",-1,25,cvSize(720,576),1);
@@ -109,9 +108,8 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
     #if WRITE_VIDEO
     cvWriteFrame(writer,input);
     #endif
-	cvCopy(input, DispImage);
-	cvShowImage(OutputWinName, DispImage );
-	cvReleaseImage(&input);
+    input.copyTo(DispImage);
+    cv::imshow(OutputWinName, DispImage );
 	
     /////////////////////////////////////
     // Now we are ready to do tracking.
@@ -121,10 +119,10 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 		i++;
 		CLM_CopySi(&Si_Init, &Si_Final);
 		sprintf(imgName, "%s/franck_%05d.jpg", dirName, i);
-		input = cvLoadImage(imgName);
-		cvConvertImage(input,searchimg,0);
-		cvCopy(input, DispImage);
-
+        input = cvLoadImage(imgName);
+        cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
+        input.copyTo(DispImage);
+        
         QueryPerformanceCounter(&L1);
 
 		Options.NumInterations = 10;
@@ -145,12 +143,10 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
         cvWriteFrame(writer,DispImage);
         #endif
 
-		cvShowImage(OutputWinName, DispImage );
+        cv::imshow(OutputWinName, DispImage );
 
 		if(i>=4980)
-			break;
-
-	    cvReleaseImage(&input);
+            break;
 
 	    /* exit if user press 'q' */
         key = cvWaitKey( 1 );

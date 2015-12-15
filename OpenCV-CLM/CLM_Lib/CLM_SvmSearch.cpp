@@ -27,12 +27,11 @@
 
 #include "QuadProg_3.hh"
 
-static void CopyImageToMat(IplImage *pImg, CvMat *pMat);
 static void DumpResponse(CvMat * r);
 static void DumpWeights(CvMat * r);
 
 
-double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options)
+double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS * Options)
 {
 	auto& ShapeModel = pModel.ShapeModel;
 	auto& PatchModel = pModel.PatchModel;
@@ -87,7 +86,8 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *Qua
 		
         cv::Mat pCrop = cv::Mat(cw, ch, CV_8UC1, 1);
         IplImage pCrop_ = pCrop;
-		cvGetQuadrangleSubPix(Image, &pCrop_, &M);
+        IplImage Image_ = Image;
+		cvGetQuadrangleSubPix(&Image_, &pCrop_, &M);
 
 		
 
@@ -102,7 +102,6 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *Qua
 		// Again, this is not exactly SVM classifcation
 		// as John Platt proposed, but it should suffice.
 		////////////////////////////////////////////////
-        CvMat Matnr_ = Matnr;
         cv::matchTemplate(Matnr, weights, Response, CV_TM_CCORR_NORMED);
 
         cv::normalize(Response, Response, 1.0, -1.0, CV_MINMAX);
@@ -274,22 +273,6 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *Qua
 	}	// end of for 68 pts.
 
 	return 0;
-}
-
-static void CopyImageToMat(IplImage *pImg, CvMat *pMat)
-{
-	uchar *pidat = (uchar*) pImg->imageData;
-	float *pmdat = pMat->data.fl;
-
-	for(int j=0;j<pImg->height;j++)
-	{
-		for(int i=0;i<pImg->width;i++)
-		{
-			pmdat[i] = (float)pidat[i];
-		}
-		pidat+=pImg->widthStep;
-		pmdat+=pMat->cols;
-	}
 }
 
 //////////////////////////////

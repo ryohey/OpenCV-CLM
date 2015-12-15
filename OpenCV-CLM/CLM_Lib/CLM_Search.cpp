@@ -31,7 +31,7 @@ static LARGE_INTEGER L2;
 
 static void DumpResponse(CvMat * r);
 
-int CLM_Search(CLM_MODEL& Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options)
+int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options)
 {
 	auto& pShapeData = Model.ShapeModel;
 	auto& pTemplateData = Model.PatchModel;

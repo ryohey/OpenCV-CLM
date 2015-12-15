@@ -17,7 +17,7 @@
 #include "clm.h"
 #include "clm_priv.h"
 
-int CLM_MakeInitialShape(CLM_MODEL& Model, IplImage *Image, double x, double y, double w, double h, double rot, CLM_SI* Initial)
+int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, CLM_SI* Initial)
 {
 	float maxx = -1000, minx = 1000, maxy = -1000, miny = 1000;
 
