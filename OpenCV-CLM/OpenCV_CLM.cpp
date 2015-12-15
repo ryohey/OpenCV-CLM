@@ -26,7 +26,7 @@ DWORD CountsPerSec;
 static LARGE_INTEGER L1;
 static LARGE_INTEGER L2;
 
-static char *OutputWinName = "Constrained Local Model Demo - OpenCV";
+const static char *OutputWinName = "Constrained Local Model Demo - OpenCV";
 
 long FrameCount = 0;
 
@@ -45,7 +45,7 @@ FILE *fci;
 
 #define WRITE_VIDEO		0
 
-int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
+int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 {
     int key=0;
 	int ret;
@@ -91,7 +91,6 @@ int pic_vid_main(CLM_MODEL *CLM_Model, const char *dirName)
     // Do search with initial guess
     // on the first image.
     ////////////////////////
-	int cnt = 0;
 	CLM_OPTIONS Options;
 	Options.NumInterations = 20;
 	
@@ -186,7 +185,7 @@ int main(int argc, char **argv) {
 
 	CLM_MODEL CLM_Model;
 
-    int ret = CLM_LoadModel(xmlFileName, &CLM_Model);
+    int ret = CLM_LoadModel(xmlFileName, CLM_Model);
     if(ret)
     {
     	printf("Cannot load %s...\n", xmlFileName);
@@ -207,7 +206,7 @@ int main(int argc, char **argv) {
      */
     auto imagesDir = "/Users/ryohei/Desktop/all-images";
     
-	pic_vid_main(&CLM_Model, imagesDir);
+	pic_vid_main(CLM_Model, imagesDir);
 
 	/* free memory */
     cvDestroyWindow( OutputWinName );

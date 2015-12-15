@@ -24,8 +24,8 @@
 ////////////////
 // Functions:
 ////////////////
-double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options);
-float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options);
+double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options);
+float CLM_Optimize(CLM_MODEL& Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options);
 
 
 int CLM_align_data(float *pdat, float *pbase, int numPts, float *pout, float *tform);

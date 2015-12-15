@@ -32,21 +32,20 @@ static void DumpResponse(CvMat * r);
 static void DumpWeights(CvMat * r);
 
 
-double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options)
+double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options)
 {
-	auto ShapeModel = &pModel->ShapeModel;
-	auto PatchModel = &pModel->PatchModel;
-
-	auto pMeanShape = ShapeModel->MeanShape;
+	auto& ShapeModel = pModel.ShapeModel;
+	auto& PatchModel = pModel.PatchModel;
+	auto& pMeanShape = ShapeModel.MeanShape;
 
 	int cw, ch;
-	cw = Options->SearchRegion[0] + pModel->PatchModel.PatchSize[0];
-	ch = Options->SearchRegion[1] + pModel->PatchModel.PatchSize[1];
+	cw = Options->SearchRegion[0] + pModel.PatchModel.PatchSize[0];
+	ch = Options->SearchRegion[1] + pModel.PatchModel.PatchSize[1];
 
 	///////////////////////////////////////
 	// Step 1, align current shape to mean shape:
 	///////////////////////////////////////
-	CLM_align_data(Si->xy->data.fl, pMeanShape->data.fl, ShapeModel->NumPtsPerSample, Si->AlignedXY->data.fl, Si->transform);
+	CLM_align_data(Si->xy->data.fl, pMeanShape->data.fl, ShapeModel.NumPtsPerSample, Si->AlignedXY->data.fl, Si->transform);
 
 	// Invert transform matrix...
 	float tm[9], invtm[9];
@@ -64,7 +63,7 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 	auto pxy = Si->AlignedXY->data.fl;
 
 	#pragma omp parallel for // This is where OpenMP shines.
-	for(int i=0;i<ShapeModel->NumPtsPerSample;i++)
+	for(int i=0;i<ShapeModel.NumPtsPerSample;i++)
 	{
 		int thread_id = omp_get_thread_num();
 		//int thread_id = 0; // if you don't have OpenMP,
@@ -72,7 +71,7 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		float m[6];
 		CvMat M = cvMat( 2, 3, CV_32F, m );
         cv::Mat Response(Options->SearchRegion[1] + 1, Options->SearchRegion[0] + 1, CV_32FC1);
-        cv::Mat weights = PatchModel->WeightMats[i];
+        cv::Mat weights = PatchModel.WeightMats[i];
 		
 		float x0c = *(pxy + i*2), y0c = *(pxy + i*2 + 1);
 
@@ -114,8 +113,8 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		///////////////////////////
 
 		// 4.1, Find center:
-		auto pxd = pModel->SvmWorkSpace[thread_id].pxcoordDat;
-		auto pyd = pModel->SvmWorkSpace[thread_id].pycoordDat;
+		auto pxd = pModel.SvmWorkSpace[thread_id].pxcoordDat;
+		auto pyd = pModel.SvmWorkSpace[thread_id].pycoordDat;
 		int rr= Response.rows, rc = Response.cols;
 		
 		for (int j=0; j<rr;j++)
@@ -175,14 +174,14 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		wr = Response.rows;
 		hr = Response.cols;
 
-        cv::Mat MatA(wr*hr, 3, CV_32FC1, pModel->SvmWorkSpace[thread_id].pAdat);
-        cv::Mat MatrL(wr*hr, 1, CV_32FC1, pModel->SvmWorkSpace[thread_id].prLDat);
+        cv::Mat MatA(wr*hr, 3, CV_32FC1, pModel.SvmWorkSpace[thread_id].pAdat);
+        cv::Mat MatrL(wr*hr, 1, CV_32FC1, pModel.SvmWorkSpace[thread_id].prLDat);
 		
-		float *pAd = pModel->SvmWorkSpace[thread_id].pAdat;
-		float *prLd = pModel->SvmWorkSpace[thread_id].prLDat;
+		float *pAd = pModel.SvmWorkSpace[thread_id].pAdat;
+		float *prLd = pModel.SvmWorkSpace[thread_id].prLDat;
 		
-		pxd = pModel->SvmWorkSpace[thread_id].pxcoordDat;
-		pyd = pModel->SvmWorkSpace[thread_id].pycoordDat;
+		pxd = pModel.SvmWorkSpace[thread_id].pxcoordDat;
+		pyd = pModel.SvmWorkSpace[thread_id].pycoordDat;
 
 		float x2t, y2t;
 		int wrhr = wr*hr;

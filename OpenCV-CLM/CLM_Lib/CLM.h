@@ -109,10 +109,10 @@ typedef struct _clm_options_
 // Functions:
 ////////////////
 
-extern int CLM_LoadModel(const char *filename, CLM_MODEL *pModel);
+extern int CLM_LoadModel(const char *filename, CLM_MODEL& pModel);
 
-extern int CLM_MakeInitialShape(CLM_MODEL *Model, IplImage *Image, double x, double y, double w, double h, double rot, CLM_SI* Initial);
-extern int CLM_Search(CLM_MODEL *Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options);
+extern int CLM_MakeInitialShape(CLM_MODEL& Model, IplImage *Image, double x, double y, double w, double h, double rot, CLM_SI* Initial);
+extern int CLM_Search(CLM_MODEL& Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options);
 
 
 extern int CLM_CopySi(CLM_SI *dst, CLM_SI *src);

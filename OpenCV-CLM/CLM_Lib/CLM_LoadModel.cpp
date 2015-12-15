@@ -29,7 +29,7 @@ static int ReadVecFromString(const char *str, float *f, int count);
 static int ReadMatFromString(const char *str, CvMat *Mat);
 
 
-int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
+int CLM_LoadModel(const char *filename, CLM_MODEL& pModel)
 {
 	
 	TiXmlDocument doc(filename);
@@ -44,18 +44,18 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	
 	auto Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("NumEvalues").ToElement();
 	auto str = Element->GetText();
-	pModel->ShapeModel.NumEvalues = atoi(str);
+	pModel.ShapeModel.NumEvalues = atoi(str);
 
 	Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("NumPts").ToElement();
 	str = Element->GetText();
-	pModel->ShapeModel.NumPtsPerSample = atoi(str);
+	pModel.ShapeModel.NumPtsPerSample = atoi(str);
 
 	// ShapeModel.MeanShape:
 	Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("MeanShape").ToElement();
 	str = Element->GetText();
-	pModel->ShapeModel.MeanShape = cvCreateMat(1, pModel->ShapeModel.NumPtsPerSample*2, CV_32FC1);
-	int NumRead = ReadVecFromString(str, pModel->ShapeModel.MeanShape->data.fl, pModel->ShapeModel.NumPtsPerSample*2);
-	if(NumRead != pModel->ShapeModel.NumPtsPerSample*2)
+	pModel.ShapeModel.MeanShape = cvCreateMat(1, pModel.ShapeModel.NumPtsPerSample*2, CV_32FC1);
+	int NumRead = ReadVecFromString(str, pModel.ShapeModel.MeanShape->data.fl, pModel.ShapeModel.NumPtsPerSample*2);
+	if(NumRead != pModel.ShapeModel.NumPtsPerSample*2)
 	{
 		return -1;
 	}
@@ -63,9 +63,9 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	// ShapeModel.Evalues:
 	Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("Evalues").ToElement();
 	str = Element->GetText();
-	pModel->ShapeModel.Evalues = cvCreateMat(1, pModel->ShapeModel.NumEvalues, CV_32FC1);
-	NumRead = ReadVecFromString(str, pModel->ShapeModel.Evalues->data.fl, pModel->ShapeModel.NumEvalues);
-	if(NumRead != pModel->ShapeModel.NumEvalues)
+	pModel.ShapeModel.Evalues = cvCreateMat(1, pModel.ShapeModel.NumEvalues, CV_32FC1);
+	NumRead = ReadVecFromString(str, pModel.ShapeModel.Evalues->data.fl, pModel.ShapeModel.NumEvalues);
+	if(NumRead != pModel.ShapeModel.NumEvalues)
 	{
 		return -1;
 	}
@@ -73,19 +73,19 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	// ShapeModel.Evectors:
 	Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("Evectors").ToElement();
 	str = Element->GetText();
-	pModel->ShapeModel.Evectors = cvCreateMat(pModel->ShapeModel.NumPtsPerSample*2, pModel->ShapeModel.NumEvalues, CV_32FC1);
-	NumRead = ReadMatFromString(str, pModel->ShapeModel.Evectors);
+	pModel.ShapeModel.Evectors = cvCreateMat(pModel.ShapeModel.NumPtsPerSample*2, pModel.ShapeModel.NumEvalues, CV_32FC1);
+	NumRead = ReadMatFromString(str, pModel.ShapeModel.Evectors);
 
 	
 	// PatchModel.NumPatches:
 	Element = docHandle.FirstChild("root").FirstChild("PatchModel").FirstChild("NumPatches").ToElement();
 	str = Element->GetText();
-	pModel->PatchModel.NumPatches = atoi(str);
+	pModel.PatchModel.NumPatches = atoi(str);
 
 	// PatchModel.PatchSize:
 	Element = docHandle.FirstChild("root").FirstChild("PatchModel").FirstChild("PatchSize").ToElement();
 	str = Element->GetText();
-	pModel->PatchModel.PatchSize[0] = atoi(str);
+	pModel.PatchModel.PatchSize[0] = atoi(str);
 
 	while(*str<='9' && *str>='0')
 		str++;
@@ -95,39 +95,39 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	if(*str == 0)
 		return -1;
 	
-	pModel->PatchModel.PatchSize[1] = atoi(str);
+	pModel.PatchModel.PatchSize[1] = atoi(str);
 
 	// PatchModel.weights:
 	Element = docHandle.FirstChild("root").FirstChild("PatchModel").FirstChild("Weights").ToElement();
 	str = Element->GetText();
 
-	auto tempW = cvCreateMat(pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], pModel->PatchModel.NumPatches, CV_32FC1);
-	auto tempWt = cvCreateMat(pModel->PatchModel.NumPatches, pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], CV_32FC1);
+	auto tempW = cvCreateMat(pModel.PatchModel.PatchSize[1]*pModel.PatchModel.PatchSize[0], pModel.PatchModel.NumPatches, CV_32FC1);
+	auto tempWt = cvCreateMat(pModel.PatchModel.NumPatches, pModel.PatchModel.PatchSize[1]*pModel.PatchModel.PatchSize[0], CV_32FC1);
 	ReadMatFromString(str, tempW);
 
 	cvT(tempW, tempWt);
 
 	auto pw = tempWt->data.fl;
-	auto ptempxx = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
-	auto ptempxxn = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
+	auto ptempxx = cvCreateMat(pModel.PatchModel.PatchSize[1], pModel.PatchModel.PatchSize[0], CV_32FC1);
+	auto ptempxxn = cvCreateMat(pModel.PatchModel.PatchSize[1], pModel.PatchModel.PatchSize[0], CV_32FC1);
 
-	auto wmat = cvMat(pModel->PatchModel.PatchSize[0], pModel->PatchModel.PatchSize[1], CV_32FC1, pw);
-	for(int i=0;i<pModel->PatchModel.NumPatches;i++)
+	auto wmat = cvMat(pModel.PatchModel.PatchSize[0], pModel.PatchModel.PatchSize[1], CV_32FC1, pw);
+	for(int i=0;i<pModel.PatchModel.NumPatches;i++)
 	{
 		wmat.data.fl = pw;
 		
 		cvT(&wmat, ptempxx);
 		cvNormalize(ptempxx, ptempxxn, 1.0, -1.0, CV_MINMAX);
 
-		pw+= pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0];
+		pw+= pModel.PatchModel.PatchSize[1]*pModel.PatchModel.PatchSize[0];
 
 		// Resize to half template size:
 
-		//pModel->PatchModel.WeightMats[i] = cvCreateMat(pModel->PatchModel.PatchSize[1]/2, pModel->PatchModel.PatchSize[0]/2, CV_32FC1);
-		//cvResize(ptempxxn, pModel->PatchModel.WeightMats[i]);
+		//pModel.PatchModel.WeightMats[i] = cvCreateMat(pModel.PatchModel.PatchSize[1]/2, pModel.PatchModel.PatchSize[0]/2, CV_32FC1);
+		//cvResize(ptempxxn, pModel.PatchModel.WeightMats[i]);
 
-		pModel->PatchModel.WeightMats[i] = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
-		cvCopy(ptempxxn, pModel->PatchModel.WeightMats[i]);
+		pModel.PatchModel.WeightMats[i] = cvCreateMat(pModel.PatchModel.PatchSize[1], pModel.PatchModel.PatchSize[0], CV_32FC1);
+		cvCopy(ptempxxn, pModel.PatchModel.WeightMats[i]);
 	}
 
 	cvReleaseMat(&ptempxx);
@@ -138,58 +138,58 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 
 
 	// Do partial calculations:
-	int NumX = pModel->ShapeModel.NumPtsPerSample*2;
+	int NumX = pModel.ShapeModel.NumPtsPerSample*2;
 
-	pModel->ShapeModel.p2alphaWMat =cvCreateMat(NumX, NumX, CV_32FC1); 
+	pModel.ShapeModel.p2alphaWMat =cvCreateMat(NumX, NumX, CV_32FC1); 
 
-	pModel->ShapeModel.pI_EEtMat = cvCreateMat(NumX, NumX, CV_32FC1);
+	pModel.ShapeModel.pI_EEtMat = cvCreateMat(NumX, NumX, CV_32FC1);
 	auto pIMat = cvCreateMat(NumX, NumX, CV_32FC1);
 
 	cvSetIdentity(pIMat);
 	
-	cvGEMM(pModel->ShapeModel.Evectors, pModel->ShapeModel.Evectors, -1.0, pIMat, 1, pModel->ShapeModel.pI_EEtMat, CV_GEMM_B_T);
+	cvGEMM(pModel.ShapeModel.Evectors, pModel.ShapeModel.Evectors, -1.0, pIMat, 1, pModel.ShapeModel.pI_EEtMat, CV_GEMM_B_T);
 	
 	float alpha = (float)CLM_OPTM_ERROR_WEIGHT;
-	cvGEMM(pModel->ShapeModel.pI_EEtMat, pModel->ShapeModel.pI_EEtMat, 2*alpha, 0, 0, pModel->ShapeModel.p2alphaWMat, CV_GEMM_A_T);
+	cvGEMM(pModel.ShapeModel.pI_EEtMat, pModel.ShapeModel.pI_EEtMat, 2*alpha, 0, 0, pModel.ShapeModel.p2alphaWMat, CV_GEMM_A_T);
 
 	cvReleaseMat(&pIMat);
 
 
-	pModel->ShapeModel.pBMat = cvCreateMat(pModel->ShapeModel.Evectors->rows, pModel->ShapeModel.Evectors->cols, CV_32FC1);
-	auto pBMatDat = pModel->ShapeModel.pBMat->data.fl;
-	auto pEvecDat = pModel->ShapeModel.Evectors->data.fl;
-	auto pEvalues = pModel->ShapeModel.Evalues->data.fl;
+	pModel.ShapeModel.pBMat = cvCreateMat(pModel.ShapeModel.Evectors->rows, pModel.ShapeModel.Evectors->cols, CV_32FC1);
+	auto pBMatDat = pModel.ShapeModel.pBMat->data.fl;
+	auto pEvecDat = pModel.ShapeModel.Evectors->data.fl;
+	auto pEvalues = pModel.ShapeModel.Evalues->data.fl;
 
 	for(int j=0;j<NumX;j++)
 	{
-		for(int i=0; i<pModel->ShapeModel.NumEvalues;i++)
+		for(int i=0; i<pModel.ShapeModel.NumEvalues;i++)
 		{
 			*pBMatDat++ = (*pEvecDat++)/sqrt(pEvalues[i]);
 		}
 	}
 
 	// Initialize temporary working data. 
-	pModel->ShapeModel.p_2HMat = cvCreateMat(NumX, NumX, CV_32FC1);
-	cvZero(pModel->ShapeModel.p_2HMat);
+	pModel.ShapeModel.p_2HMat = cvCreateMat(NumX, NumX, CV_32FC1);
+	cvZero(pModel.ShapeModel.p_2HMat);
 
 	
-	pModel->ShapeModel.p_FMat = cvCreateMat(NumX, 1, CV_32FC1);
+	pModel.ShapeModel.p_FMat = cvCreateMat(NumX, 1, CV_32FC1);
 
-	pModel->ShapeModel.p2alphaWtBMat = cvCreateMat(NumX, 1, CV_32FC1);
+	pModel.ShapeModel.p2alphaWtBMat = cvCreateMat(NumX, 1, CV_32FC1);
 
-	pModel->ShapeModel.pBBaseMat = cvCreateMat(pModel->ShapeModel.NumEvalues, 1, CV_32FC1);
+	pModel.ShapeModel.pBBaseMat = cvCreateMat(pModel.ShapeModel.NumEvalues, 1, CV_32FC1);
 
 
 	// Initialize workspace data:
 	for(int i=0;i<CURRENT_NUM_THREADS;i++)
 	{
-		pModel->SvmWorkSpace[i].pAdat = (float*)malloc(65536*3*sizeof(float));	//(TemplateSizeX*scale/SearchArea*2)^2*3
-		pModel->SvmWorkSpace[i].prLDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
-		pModel->SvmWorkSpace[i].pxcoordDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
-		pModel->SvmWorkSpace[i].pycoordDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
+		pModel.SvmWorkSpace[i].pAdat = (float*)malloc(65536*3*sizeof(float));	//(TemplateSizeX*scale/SearchArea*2)^2*3
+		pModel.SvmWorkSpace[i].prLDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
+		pModel.SvmWorkSpace[i].pxcoordDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
+		pModel.SvmWorkSpace[i].pycoordDat = (float*)malloc(65536*sizeof(float));		//(TemplateSizeX*scale/SearchArea*2)^2
 
 
-		pModel->SvmWorkSpace[i].pnrDat = (float*)malloc(65536*16*sizeof(float));	// (2*dx+TemplateSizeX)^2
+		pModel.SvmWorkSpace[i].pnrDat = (float*)malloc(65536*16*sizeof(float));	// (2*dx+TemplateSizeX)^2
 	}
 	
 	return 0;

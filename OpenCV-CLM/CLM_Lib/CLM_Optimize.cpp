@@ -37,17 +37,17 @@ static void DumpCI(double *ci, int len);
 
 extern DWORD CountsPerSec;
 
-float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options)
+float CLM_Optimize(CLM_MODEL& Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options)
 {
 	// Step 0: Prepare...
-	int NumX = Model->PatchModel.NumPatches*2;
+	int NumX = Model.PatchModel.NumPatches*2;
 	int i;  
 
 	//////////////////////////////////////////////////
 	// Step 1: Prepare -2H and -F in R:(0.5*x_t*2H*x+F*x)
 	//////////////////////////////////////////////////
-	auto p_2Hdat = Model->ShapeModel.p_2HMat->data.fl;
-	auto p_Fdat = Model->ShapeModel.p_FMat->data.fl;
+	auto p_2Hdat = Model.ShapeModel.p_2HMat->data.fl;
+	auto p_Fdat = Model.ShapeModel.p_FMat->data.fl;
 
 	for(i=0;i<NumX/2;i++)
 	{
@@ -72,7 +72,7 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	float newxy[256];
 	auto w0 = (float)(Options->SearchRegion[0] + 1)/2;
 
-	auto pMeanShape = Model->ShapeModel.MeanShape;
+	auto& pMeanShape = Model.ShapeModel.MeanShape;
 	auto pMeanxy = pMeanShape->data.fl;
 	
 	auto alignedxy = Si->AlignedXY->data.fl;
@@ -89,16 +89,16 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 
 	// 2.2, norm2((x+basexy)-Evec*Evec'*(x+basexy)) = x'*W*x + 2*basexy'*W*x + basexy'*W*basexy;
 	//			where W = (I-E*E')'*(I-E*E')
-    cv::Mat p2AlphaWMat_(Model->ShapeModel.p2alphaWMat);
-    cv::Mat p2alphaWtBMat_(Model->ShapeModel.p2alphaWtBMat);
+    cv::Mat p2AlphaWMat_(Model.ShapeModel.p2alphaWMat);
+    cv::Mat p2alphaWtBMat_(Model.ShapeModel.p2alphaWtBMat);
     cv::gemm(p2AlphaWMat_, BasexyMat, 1, 0, 0, p2alphaWtBMat_, CV_GEMM_A_T);
 
 
 	///////////////////////////
 	// Step 3: Prepare G, g0:
 	///////////////////////////
-	auto psrc1 = Model->ShapeModel.p_2HMat->data.fl;
-	auto psrc2 = Model->ShapeModel.p2alphaWMat->data.fl;
+	auto psrc1 = Model.ShapeModel.p_2HMat->data.fl;
+	auto psrc2 = Model.ShapeModel.p2alphaWMat->data.fl;
 	
 	static double G[200][MATRIX_DIM_440];
 	
@@ -122,8 +122,8 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 
 
 
-	psrc1 = Model->ShapeModel.p_FMat->data.fl;
-	psrc2 = Model->ShapeModel.p2alphaWtBMat->data.fl;
+	psrc1 = Model.ShapeModel.p_FMat->data.fl;
+	psrc2 = Model.ShapeModel.p2alphaWtBMat->data.fl;
 
 	double g0[200];
 
@@ -138,8 +138,8 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	//		B'x + B'*basexy + sub > 0;
 	////////////////////////////////////
 	// 4.1, Calculate BMat'*basexy
-    cv::Mat pBMat_(Model->ShapeModel.pBMat);
-    cv::Mat pBBaseMat_(Model->ShapeModel.pBBaseMat);
+    cv::Mat pBMat_(Model.ShapeModel.pBMat);
+    cv::Mat pBBaseMat_(Model.ShapeModel.pBBaseMat);
     cv::gemm(pBMat_, BasexyMat, 1, 0, 0, pBBaseMat_, CV_GEMM_A_T);
 	
 	// 4.2, Create CI:
@@ -154,7 +154,7 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	// I need to.
 	//memset(CI, 0, sizeof(CI));
 
-	auto pBMatDat = Model->ShapeModel.pBMat->data.fl;
+	auto pBMatDat = Model.ShapeModel.pBMat->data.fl;
 	
 	for(i=0;i<NumX;i++)
 	{
@@ -163,15 +163,15 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 		CI[i][NumX+i] = 1;
 
 		// Shape constraint: -3<bj/sqrt(lambdaj)<3
-		for(int k=0;k<Model->ShapeModel.NumEvalues;k++)
+		for(int k=0;k<Model.ShapeModel.NumEvalues;k++)
 		{
 			CI[i][NumX*2+k] = -(*pBMatDat);
-			CI[i][NumX*2+Model->ShapeModel.NumEvalues+k] = *pBMatDat++;
+			CI[i][NumX*2+Model.ShapeModel.NumEvalues+k] = *pBMatDat++;
 		}
 	
 	}
 
-	//DumpCI(CI[0], NumX*2+Model->ShapeModel.NumEvalues*2);
+	//DumpCI(CI[0], NumX*2+Model.ShapeModel.NumEvalues*2);
 
 	// 4.3, Create ci0:
 	double ci0[MATRIX_DIM_440];
@@ -183,20 +183,20 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 		ci0[NumX+i] = 0;
 	}
 
-	auto pBBaseMatDat = Model->ShapeModel.pBBaseMat->data.fl;
+	auto pBBaseMatDat = Model.ShapeModel.pBBaseMat->data.fl;
 	
-	for(i=0;i<Model->ShapeModel.NumEvalues;i++)
+	for(i=0;i<Model.ShapeModel.NumEvalues;i++)
 	{
 		// Shape constraint:
 		ci0[2*NumX+i] = 3 - *pBBaseMatDat;
-		ci0[2*NumX+Model->ShapeModel.NumEvalues+i] = 3 + *pBBaseMatDat++;
+		ci0[2*NumX+Model.ShapeModel.NumEvalues+i] = 3 + *pBBaseMatDat++;
 	}
 	
 	//////////////////////////////
 	// Step 5, Do quadprog:
 	//////////////////////////////
 	double xout[200];
-	double err = solve_quadprog_136(G, g0, NumX, 0, 0, 0, CI, ci0, (2*NumX + 2*Model->ShapeModel.NumEvalues), xout);
+	double err = solve_quadprog_136(G, g0, NumX, 0, 0, 0, CI, ci0, (2*NumX + 2*Model.ShapeModel.NumEvalues), xout);
 	
 	//////////////////////////
 	// Step 6, Reconstruct x:
@@ -209,7 +209,7 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	///////////////////////////////////////////////
 	// Step 7, align back to image coordinate.
 	///////////////////////////////////////////////
-	CLM_align_data_inverse(newxy, tform, Model->ShapeModel.NumPtsPerSample, Si->xy->data.fl);
+	CLM_align_data_inverse(newxy, tform, Model.ShapeModel.NumPtsPerSample, Si->xy->data.fl);
 
 
 	return 0.0f;

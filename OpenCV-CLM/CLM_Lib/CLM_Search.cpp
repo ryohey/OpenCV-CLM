@@ -31,10 +31,10 @@ static LARGE_INTEGER L2;
 
 static void DumpResponse(CvMat * r);
 
-int CLM_Search(CLM_MODEL *Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options)
+int CLM_Search(CLM_MODEL& Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options)
 {
-	CLM_SHAPE_MODEL *pShapeData = &Model->ShapeModel;
-	CLM_PATCH_MODEL *pTemplateData = &Model->PatchModel;
+	auto& pShapeData = Model.ShapeModel;
+	auto& pTemplateData = Model.PatchModel;
 
 	int iter;
 
@@ -51,7 +51,7 @@ int CLM_Search(CLM_MODEL *Model, IplImage *Image, CLM_SI *Initial, CLM_SI *Final
 	// Do search:
 	float coeffs[8*100];
 	
-	int NumPatches = pTemplateData->NumPatches;
+	int NumPatches = pTemplateData.NumPatches;
 	for(iter = 0; iter < nIterations; iter++)
 	{
 		CLM_SvmSearch(&Inter, Model, Image, coeffs, Options);
