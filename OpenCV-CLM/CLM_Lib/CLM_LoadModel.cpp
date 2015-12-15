@@ -42,8 +42,8 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 
 	TiXmlHandle docHandle( &doc );
 	
-	TiXmlElement *Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("NumEvalues").ToElement();
-	const char *str = Element->GetText();
+	auto Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("NumEvalues").ToElement();
+	auto str = Element->GetText();
 	pModel->ShapeModel.NumEvalues = atoi(str);
 
 	Element = docHandle.FirstChild("root").FirstChild("ShapeModel").FirstChild("NumPts").ToElement();
@@ -101,17 +101,17 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	Element = docHandle.FirstChild("root").FirstChild("PatchModel").FirstChild("Weights").ToElement();
 	str = Element->GetText();
 
-	CvMat *tempW = cvCreateMat(pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], pModel->PatchModel.NumPatches, CV_32FC1);
-	CvMat *tempWt = cvCreateMat(pModel->PatchModel.NumPatches, pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], CV_32FC1); 
+	auto tempW = cvCreateMat(pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], pModel->PatchModel.NumPatches, CV_32FC1);
+	auto tempWt = cvCreateMat(pModel->PatchModel.NumPatches, pModel->PatchModel.PatchSize[1]*pModel->PatchModel.PatchSize[0], CV_32FC1);
 	ReadMatFromString(str, tempW);
 
 	cvT(tempW, tempWt);
 
-	float *pw = tempWt->data.fl;
-	CvMat *ptempxx = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
-	CvMat *ptempxxn = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
+	auto pw = tempWt->data.fl;
+	auto ptempxx = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
+	auto ptempxxn = cvCreateMat(pModel->PatchModel.PatchSize[1], pModel->PatchModel.PatchSize[0], CV_32FC1);
 
-	CvMat wmat = cvMat(pModel->PatchModel.PatchSize[0], pModel->PatchModel.PatchSize[1], CV_32FC1, pw);
+	auto wmat = cvMat(pModel->PatchModel.PatchSize[0], pModel->PatchModel.PatchSize[1], CV_32FC1, pw);
 	for(int i=0;i<pModel->PatchModel.NumPatches;i++)
 	{
 		wmat.data.fl = pw;
@@ -143,7 +143,7 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 	pModel->ShapeModel.p2alphaWMat =cvCreateMat(NumX, NumX, CV_32FC1); 
 
 	pModel->ShapeModel.pI_EEtMat = cvCreateMat(NumX, NumX, CV_32FC1);
-	CvMat *pIMat = cvCreateMat(NumX, NumX, CV_32FC1);
+	auto pIMat = cvCreateMat(NumX, NumX, CV_32FC1);
 
 	cvSetIdentity(pIMat);
 	
@@ -156,9 +156,9 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 
 
 	pModel->ShapeModel.pBMat = cvCreateMat(pModel->ShapeModel.Evectors->rows, pModel->ShapeModel.Evectors->cols, CV_32FC1);
-	float *pBMatDat = pModel->ShapeModel.pBMat->data.fl;
-	float *pEvecDat = pModel->ShapeModel.Evectors->data.fl;
-	float *pEvalues = pModel->ShapeModel.Evalues->data.fl;
+	auto pBMatDat = pModel->ShapeModel.pBMat->data.fl;
+	auto pEvecDat = pModel->ShapeModel.Evectors->data.fl;
+	auto pEvalues = pModel->ShapeModel.Evalues->data.fl;
 
 	for(int j=0;j<NumX;j++)
 	{
@@ -199,7 +199,7 @@ int CLM_LoadModel(const char *filename, CLM_MODEL *pModel)
 
 static int ReadVecFromString(const char *str, float *f, int count)
 {
-	const char *ptr = str;
+	auto ptr = str;
 	int i;
 
 	for(i=0;i<count;i++)
@@ -221,11 +221,10 @@ static int ReadVecFromString(const char *str, float *f, int count)
 
 static int ReadMatFromString(const char *str, CvMat *Mat)
 {
-	const char *ptr = str;
+	auto ptr = str;
 	int i;
 	float *pdat;
 	
-
 	pdat = Mat->data.fl;
 	
 	for(i=0;i<Mat->cols*Mat->rows;i++)
