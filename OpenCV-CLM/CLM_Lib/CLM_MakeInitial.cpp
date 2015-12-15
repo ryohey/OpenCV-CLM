@@ -19,29 +19,22 @@
 
 int CLM_MakeInitialShape(CLM_MODEL *Model, IplImage *Image, double x, double y, double w, double h, double rot, CLM_SI* Initial)
 {
-	CLM_PATCH_MODEL *pTemplates;
-	CLM_SHAPE_MODEL *pShapes;
-	CvMat *Homo = 0, *pMean = 0, *Outxy = 0;
-	int NumPts = 0;
-	int step;
-
-	float *psrc, *pdst;
 	float maxx = -1000, minx = 1000, maxy = -1000, miny = 1000;
 
 	// Set up...
-	pTemplates = &Model->PatchModel;
-	pShapes = &Model->ShapeModel;
-	NumPts = pShapes->NumPtsPerSample;
+	auto pTemplates = &Model->PatchModel;
+	auto pShapes = &Model->ShapeModel;
+	int NumPts = pShapes->NumPtsPerSample;
 
-	pMean = pShapes->MeanShape;
+	auto pMean = pShapes->MeanShape;
 
-	Homo = cvCreateMat(3, NumPts, CV_32FC1);
-
+    cv::Mat Homo(3, NumPts, CV_32FC1);
+    
 
 	// Calculate mean shape x, y;
 	float meanx=0, meany = 0;
 	
-	psrc = pMean->data.fl;
+	auto psrc = pMean->data.fl;
 	for (int i=0;i<NumPts;i++)
 	{
 		meanx += *psrc++;
@@ -51,36 +44,34 @@ int CLM_MakeInitialShape(CLM_MODEL *Model, IplImage *Image, double x, double y, 
 	meany /=NumPts;
 
 	// Copy to homogenous matrix...
-	pdst = Homo->data.fl;
 	psrc = pMean->data.fl;
-	step = Homo->step/sizeof(float);	
+	int step = Homo.step/sizeof(float);
 	for (int i=0;i<NumPts; i++)
 	{
-		*pdst = *(psrc) - meanx;
-		*(pdst + step) = *(psrc + 1) - meany;
-		*(pdst + step*2) = 1;
+		Homo.at<float>(i) = *(psrc) - meanx;
+		Homo.at<float>(i + step) = *(psrc + 1) - meany;
+		Homo.at<float>(i + step*2) = 1;
 
-		if(*pdst>maxx)
+		if(Homo.at<float>(i)>maxx)
 		{
-			maxx = *pdst;
+			maxx = Homo.at<float>(i);
 		}
-		if(*pdst<minx)
+		if(Homo.at<float>(i)<minx)
 		{
-			minx = *pdst;
-		}
-
-		if(*(pdst + step) > maxy)
-		{
-			maxy = *(pdst + step);
+			minx = Homo.at<float>(i);
 		}
 
-		if(*(pdst + step) < miny)
+		if(Homo.at<float>(i + step) > maxy)
 		{
-			miny = *(pdst + step);
+			maxy = Homo.at<float>(i + step);
+		}
+
+		if(Homo.at<float>(i + step) < miny)
+		{
+			miny = Homo.at<float>(i + step);
 		}
 
 		psrc+=2;
-		pdst++;
 	}
 
 	// Calculate scale factor:
@@ -100,63 +91,46 @@ int CLM_MakeInitialShape(CLM_MODEL *Model, IplImage *Image, double x, double y, 
 
 	float rotmdat[9];
 	
-	CvMat Rotm = cvMat(3, 3, CV_32FC1, rotmdat);
-	pdst = Rotm.data.fl;
+    cv::Mat Rotm(3, 3, CV_32FC1, rotmdat);
 	step = Rotm.step/sizeof(float);
-	
-	pdst[0] = (float)cos(rot);
-	pdst[1] = (float)sin(rot);
-	pdst[2] = 0;
+        
+    Rotm.at<float>(0) = (float)cos(rot);
+    Rotm.at<float>(1) = (float)sin(rot);
+    Rotm.at<float>(2) = 0;
+    
+	Rotm.at<float>(step) = -(float)sin(rot);
+	Rotm.at<float>(step + 1) = (float)cos(rot);
+	Rotm.at<float>(step + 2) = 0;
 
-	pdst[step] = -(float)sin(rot);
-	pdst[step + 1] = (float)cos(rot);
-	pdst[step + 2] = 0;
-
-	pdst[step*2] = 0;
-	pdst[step*2 + 1] = 0;
-	pdst[step*2 + 2] = 1;
+	Rotm.at<float>(step*2) = 0;
+	Rotm.at<float>(step*2 + 1) = 0;
+	Rotm.at<float>(step*2 + 2) = 1;
 
 
 	// Multiply to obtain rotation matrix:
-	Outxy = cvCreateMat(3, NumPts, CV_32FC1);
+    cv::Mat Outxy(3, NumPts, CV_32FC1);
 
-	cvGEMM(&Rotm, Homo, scf, 0, 0, Outxy, 0);
-
+    cv::gemm(Rotm, Homo, scf, 0, 0, Outxy, 0);
 
 	// Assemble return value:
 	
 	Initial->xy = cvCreateMat(NumPts, 2, CV_32FC1);
 	Initial->AlignedXY = cvCreateMat(NumPts, 2, CV_32FC1);
 
-	psrc = Outxy->data.fl;
+	step = Outxy.step/sizeof(float);
 
-	step = Outxy->step/sizeof(float);
-
-	pdst = Initial->xy->data.fl;
+	auto pdst = Initial->xy->data.fl;
 	
 	for (int i=0; i<NumPts;i++)
 	{
-		*pdst++ = *psrc + centerx;
-		*pdst++ = *(psrc+step) + centery;
-
-		psrc++;
+		*pdst++ = Outxy.at<float>(i) + centerx;
+		*pdst++ = Outxy.at<float>(i + step) + centery;
 	}
 
 	Initial->transform[0] = (float)(scf*cos(rot));
 	Initial->transform[1] = (float)(scf*sin(rot));
 	Initial->transform[2] = centerx;
 	Initial->transform[3] = centery;
-
-	//Initial->center[0] = centerx;
-	//Initial->center[1] = centery;
-	//Initial->rotation = rot;
-	//Initial->scale = scf;
-
-	cvReleaseMat(&Homo);
-	cvReleaseMat(&Outxy);
-	
 	
 	return 0;
-	
 }
-
