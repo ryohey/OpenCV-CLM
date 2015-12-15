@@ -36,8 +36,6 @@ static void DumpVec(float *vec, int len);
 static void DumpCI(double *ci, int len);
 
 extern DWORD CountsPerSec;
-static LARGE_INTEGER L1;
-static LARGE_INTEGER L2;
 
 float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options)
 {
@@ -48,8 +46,8 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	//////////////////////////////////////////////////
 	// Step 1: Prepare -2H and -F in R:(0.5*x_t*2H*x+F*x)
 	//////////////////////////////////////////////////
-	float *p_2Hdat = Model->ShapeModel.p_2HMat->data.fl;
-	float *p_Fdat = Model->ShapeModel.p_FMat->data.fl;
+	auto p_2Hdat = Model->ShapeModel.p_2HMat->data.fl;
+	auto p_Fdat = Model->ShapeModel.p_FMat->data.fl;
 
 	for(i=0;i<NumX/2;i++)
 	{
@@ -72,14 +70,13 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	//////////////////////////////////////////////////////////////////
 	// 2.1, basexy:
 	float newxy[256];
-	float w0 = (float)(Options->SearchRegion[0] + 1)/2;
+	auto w0 = (float)(Options->SearchRegion[0] + 1)/2;
 
-	CvMat *pMeanShape = Model->ShapeModel.MeanShape;
-	float *pMeanxy = pMeanShape->data.fl;
-	float *pxy0 = Si->xy->data.fl;
+	auto pMeanShape = Model->ShapeModel.MeanShape;
+	auto pMeanxy = pMeanShape->data.fl;
 	
-	float *alignedxy = Si->AlignedXY->data.fl;
-	float *tform = Si->transform;
+	auto alignedxy = Si->AlignedXY->data.fl;
+	auto tform = Si->transform;
 	
 	float basexy[256];
 
@@ -88,19 +85,20 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 		basexy[i] = alignedxy[i]-pMeanxy[i]-w0;
 	}
 
-	CvMat BasexyMat = cvMat(NumX, 1, CV_32FC1, basexy);
-
+    cv::Mat BasexyMat(NumX, 1, CV_32FC1, basexy);
 
 	// 2.2, norm2((x+basexy)-Evec*Evec'*(x+basexy)) = x'*W*x + 2*basexy'*W*x + basexy'*W*basexy;
 	//			where W = (I-E*E')'*(I-E*E')
-	cvGEMM(Model->ShapeModel.p2alphaWMat, &BasexyMat, 1, 0, 0, Model->ShapeModel.p2alphaWtBMat, CV_GEMM_A_T);
+    cv::Mat p2AlphaWMat_(Model->ShapeModel.p2alphaWMat);
+    cv::Mat p2alphaWtBMat_(Model->ShapeModel.p2alphaWtBMat);
+    cv::gemm(p2AlphaWMat_, BasexyMat, 1, 0, 0, p2alphaWtBMat_, CV_GEMM_A_T);
 
 
 	///////////////////////////
 	// Step 3: Prepare G, g0:
 	///////////////////////////
-	float *psrc1 = Model->ShapeModel.p_2HMat->data.fl;
-	float *psrc2 = Model->ShapeModel.p2alphaWMat->data.fl;
+	auto psrc1 = Model->ShapeModel.p_2HMat->data.fl;
+	auto psrc2 = Model->ShapeModel.p2alphaWMat->data.fl;
 	
 	static double G[200][MATRIX_DIM_440];
 	
@@ -140,7 +138,9 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	//		B'x + B'*basexy + sub > 0;
 	////////////////////////////////////
 	// 4.1, Calculate BMat'*basexy
-	cvGEMM(Model->ShapeModel.pBMat, &BasexyMat, 1, 0, 0, Model->ShapeModel.pBBaseMat, CV_GEMM_A_T);
+    cv::Mat pBMat_(Model->ShapeModel.pBMat);
+    cv::Mat pBBaseMat_(Model->ShapeModel.pBBaseMat);
+    cv::gemm(pBMat_, BasexyMat, 1, 0, 0, pBBaseMat_, CV_GEMM_A_T);
 	
 	// 4.2, Create CI:
 	//
@@ -154,7 +154,7 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	// I need to.
 	//memset(CI, 0, sizeof(CI));
 
-	float *pBMatDat = Model->ShapeModel.pBMat->data.fl;
+	auto pBMatDat = Model->ShapeModel.pBMat->data.fl;
 	
 	for(i=0;i<NumX;i++)
 	{
@@ -183,7 +183,7 @@ float CLM_Optimize(CLM_MODEL* Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 		ci0[NumX+i] = 0;
 	}
 
-	float *pBBaseMatDat = Model->ShapeModel.pBBaseMat->data.fl;
+	auto pBBaseMatDat = Model->ShapeModel.pBBaseMat->data.fl;
 	
 	for(i=0;i<Model->ShapeModel.NumEvalues;i++)
 	{

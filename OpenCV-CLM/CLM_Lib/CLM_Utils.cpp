@@ -107,8 +107,8 @@ int CLM_Procrustes0(float *pdat, float *pbase, int numPts)
 int CLM_align_data(float *pdat, float *pbase, int numPts, float *pout, float *tform)
 {
 	int i;
-	float *pdat0 = pdat, *pbase0 = pbase;
-	
+    float *pdat0 = pdat;
+    
 	float ux=0, uy=0, uxp=0, uyp=0, s=0, w1=0, w2=0;
 	float tx, ty, txp, typ;
 	for(i=0;i<numPts;i++)
@@ -146,15 +146,15 @@ int CLM_align_data(float *pdat, float *pbase, int numPts, float *pout, float *tf
 	rmat[0] = uxp; rmat[1] = uyp; rmat[2] = w1; rmat[3] = w2;
 
 	// pmat^-1 * rmat;
-	CvMat MatP = cvMat(4, 4, CV_32FC1, pmat);
-	CvMat MatR = cvMat(4, 1, CV_32FC1, rmat);
+    cv::Mat MatP(4, 4, CV_32FC1, pmat);
+    cv::Mat MatR(4, 1, CV_32FC1, rmat);
 
-	CvMat MatPinv = cvMat(4, 4, CV_32FC1, invp);
-	cvInvert(&MatP, &MatPinv);
+    cv::Mat MatPinv(4, 4, CV_32FC1, invp);
+    cv::invert(MatP, MatPinv);
 
-	CvMat MatRes = cvMat(4, 1, CV_32FC1, tform);
+    cv::Mat MatRes(4, 1, CV_32FC1, tform);
 
-	cvGEMM(&MatPinv, &MatR, 1, 0, 0, &MatRes);
+    cv::gemm(MatPinv, MatR, 1, 0, 0, MatRes);
 
 	//	assemble output:
 	pdat = pdat0;

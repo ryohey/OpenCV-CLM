@@ -34,11 +34,10 @@ static void DumpWeights(CvMat * r);
 
 double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *QuadCoeffs, CLM_OPTIONS * Options)
 {
- 	
-	CLM_SHAPE_MODEL *ShapeModel = &pModel->ShapeModel;
-	CLM_PATCH_MODEL *PatchModel = &pModel->PatchModel;
+	auto ShapeModel = &pModel->ShapeModel;
+	auto PatchModel = &pModel->PatchModel;
 
-	CvMat *pMeanShape = ShapeModel->MeanShape;
+	auto pMeanShape = ShapeModel->MeanShape;
 
 	int cw, ch;
 	cw = Options->SearchRegion[0] + pModel->PatchModel.PatchSize[0];
@@ -54,15 +53,15 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 	tm[0] = Si->transform[0]; tm[1] = Si->transform[1]; tm[2] = Si->transform[2]; 
 	tm[3] = -Si->transform[1]; tm[4] = Si->transform[0]; tm[5] = Si->transform[3];
 	tm[6] = 0; tm[7] = 0; tm[8] = 1;
-	CvMat MatTm = cvMat(3, 3, CV_32FC1, tm);
-	CvMat invMatTm = cvMat(3, 3, CV_32FC1, invtm);
-	cvInvert(&MatTm, &invMatTm);
+    cv::Mat MatTm(3, 3, CV_32FC1, tm);
+    cv::Mat invMatTm(3, 3, CV_32FC1, invtm);
+    cv::invert(MatTm, invMatTm);
 
 	///////////////////////////////////////////////////////////////
 	// Step 2, crop patches around each feature point position, 
 	// do SVM classification, and quadratic fitting.
 	//////////////////////////////////////////////////////////////
-	float *pxy = Si->AlignedXY->data.fl;
+	auto pxy = Si->AlignedXY->data.fl;
 
 	#pragma omp parallel for // This is where OpenMP shines.
 	for(int i=0;i<ShapeModel->NumPtsPerSample;i++)
@@ -72,8 +71,8 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 
 		float m[6];
 		CvMat M = cvMat( 2, 3, CV_32F, m );
-		CvMat *Response = cvCreateMat(Options->SearchRegion[1] + 1, Options->SearchRegion[0] + 1, CV_32FC1);
-		CvMat *weights = PatchModel->WeightMats[i];
+        cv::Mat Response(Options->SearchRegion[1] + 1, Options->SearchRegion[0] + 1, CV_32FC1);
+        cv::Mat weights = PatchModel->WeightMats[i];
 		
 		float x0c = *(pxy + i*2), y0c = *(pxy + i*2 + 1);
 
@@ -87,25 +86,27 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		m[4] = m[0];
 		m[5] = invtm[5] - invtm[1]*x0c + invtm[0]*y0c;
 		
-		IplImage *pCrop = cvCreateImage(cvSize(cw, ch), 8, 1);
-		cvGetQuadrangleSubPix(Image, pCrop, &M);
+        cv::Mat pCrop = cv::Mat(cw, ch, CV_8UC1, 1);
+        IplImage pCrop_ = pCrop;
+		cvGetQuadrangleSubPix(Image, &pCrop_, &M);
 
 		
 
 		//////////////////////////////////
 		// Step 2, Convert to float type.
 		//////////////////////////////////
-		CvMat Matnr = cvMat(pCrop->height, pCrop->width, CV_32FC1, pModel->SvmWorkSpace[thread_id].pnrDat);
-		CopyImageToMat(pCrop, &Matnr);
-
+        cv::Mat Matnr;
+        pCrop.convertTo(Matnr, CV_32FC1);
+        
 		////////////////////////////////////////////////
 		// Step 3, cross-correlation with SVM image. 
 		// Again, this is not exactly SVM classifcation
 		// as John Platt proposed, but it should suffice.
 		////////////////////////////////////////////////
-		cvMatchTemplate(&Matnr, weights, Response, CV_TM_CCORR_NORMED);
+        CvMat Matnr_ = Matnr;
+        cv::matchTemplate(Matnr, weights, Response, CV_TM_CCORR_NORMED);
 
-		cvNormalize(Response, Response, 1.0, -1.0, CV_MINMAX);
+        cv::normalize(Response, Response, 1.0, -1.0, CV_MINMAX);
 		
 
 		///////////////////////////
@@ -113,16 +114,11 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		///////////////////////////
 
 		// 4.1, Find center:
-		CvScalar sumr = cvSum(Response);
-
-		CvMat MatXcoord = cvMat(Response->rows, Response->cols, CV_32FC1, pModel->SvmWorkSpace[thread_id].pxcoordDat);
-		CvMat MatYcoord = cvMat(Response->rows, Response->cols, CV_32FC1, pModel->SvmWorkSpace[thread_id].pycoordDat);
-		float *pxd = pModel->SvmWorkSpace[thread_id].pxcoordDat;
-		float *pyd = pModel->SvmWorkSpace[thread_id].pycoordDat;
-		int stepxy = MatXcoord.step/sizeof(float);
-		int rr= Response->rows, rc = Response->cols;
+		auto pxd = pModel->SvmWorkSpace[thread_id].pxcoordDat;
+		auto pyd = pModel->SvmWorkSpace[thread_id].pycoordDat;
+		int rr= Response.rows, rc = Response.cols;
 		
-		for (register int j=0; j<rr;j++)
+		for (int j=0; j<rr;j++)
 		{
 			for(int i=0;i<rc;i++)
 			{
@@ -165,26 +161,25 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		#else
 			// Use max response position as center.
 			double maxv;
-			CvPoint maxLoc;
+            cv::Point maxLoc;
 
-			cvMinMaxLoc(Response, 0, &maxv, 0, &maxLoc, 0);
-			float centerx = (float)maxLoc.x;
-			float centery = (float)maxLoc.y;
+            cv::minMaxLoc(Response, 0, &maxv, 0, &maxLoc);
+			auto centerx = (float)maxLoc.x;
+			auto centery = (float)maxLoc.y;
 
 		#endif
 
 		
 		// 4.2, Assemble A:
 		int wr, hr;
-		wr = Response->rows;
-		hr = Response->cols;
+		wr = Response.rows;
+		hr = Response.cols;
 
-		CvMat MatA = cvMat(wr*hr, 3, CV_32FC1, pModel->SvmWorkSpace[thread_id].pAdat);
-		CvMat MatrL = cvMat(wr*hr, 1, CV_32FC1, pModel->SvmWorkSpace[thread_id].prLDat);
+        cv::Mat MatA(wr*hr, 3, CV_32FC1, pModel->SvmWorkSpace[thread_id].pAdat);
+        cv::Mat MatrL(wr*hr, 1, CV_32FC1, pModel->SvmWorkSpace[thread_id].prLDat);
 		
 		float *pAd = pModel->SvmWorkSpace[thread_id].pAdat;
 		float *prLd = pModel->SvmWorkSpace[thread_id].prLDat;
-		float *prd = Response->data.fl;
 		
 		pxd = pModel->SvmWorkSpace[thread_id].pxcoordDat;
 		pyd = pModel->SvmWorkSpace[thread_id].pycoordDat;
@@ -208,17 +203,17 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 			*pAd++ = y2t;
 			*pAd++ = 1;
 
-			*prLd++ = *prd++;
+			*prLd++ = Response.at<float>(j);
 		}
 
 		// 4.3, Prepare G, g0, CI, ci0;
 		float Dat2AtA[9];
-		CvMat Mat2AtA = cvMat(3, 3, CV_32FC1, Dat2AtA);
-		cvGEMM(&MatA, &MatA, 2.0, 0, 0, &Mat2AtA, CV_GEMM_A_T);
+        cv::Mat Mat2AtA(3, 3, CV_32FC1, Dat2AtA);
+        cv::gemm(MatA, MatA, 2.0, 0, 0, Mat2AtA, CV_GEMM_A_T);
 
 		float Dat_2At_rl[3];
-		CvMat Mat_2At_rL = cvMat(3, 1, CV_32FC1, Dat_2At_rl);
-		cvGEMM(&MatA, &MatrL, -2.0, 0, 0, &Mat_2At_rL, CV_GEMM_A_T);
+        cv::Mat Mat_2At_rL(3, 1, CV_32FC1, Dat_2At_rl);
+        cv::gemm(MatA, MatrL, -2.0, 0, 0, Mat_2At_rL, CV_GEMM_A_T);
 
 		// 4.4, Quadratic programming:
 		double G[3][3];
@@ -276,12 +271,6 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL* pModel, IplImage* Image, float *Qua
 		QuadCoeffs[5+8*i] = (float)a*centerx*centerx + (float)b*centery*centery + (float)c;
 		QuadCoeffs[6+8*i] = centerx;
 		QuadCoeffs[7+8*i] = centery;
-
-		/////////////////////////
-		// Step 6, clean up:
-		/////////////////////////
-		cvReleaseImage(&pCrop);
-		cvReleaseMat(&Response);
 
 	}	// end of for 68 pts.
 
