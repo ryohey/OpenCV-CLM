@@ -19,13 +19,7 @@
 #include "cv.h"
 #include "highgui.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "CLM_Lib\clm.h"
-#ifdef __cplusplus
-}
-#endif
+#include "clm.h"
 
 LARGE_INTEGER PerfFreq;
 DWORD CountsPerSec;

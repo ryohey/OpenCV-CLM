@@ -17,10 +17,6 @@
 
 #include "stdafx.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "math.h"
 
 #include "cv.h"
@@ -29,14 +25,10 @@ extern "C" {
 #include "clm.h"
 #include "clm_priv.h"
 
-#ifdef __cplusplus
-}
-#endif
-
 extern FILE * fpout;
 
 
-#include "..\QuadProg++\QuadProg_136.hh"
+#include "QuadProg_136.hh"
 
 
 static void DumpMat(CvMat * r);

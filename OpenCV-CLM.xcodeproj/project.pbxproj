@@ -7,24 +7,73 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F9561BDB1C1FC50000F59699 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BDA1C1FC50000F59699 /* main.cpp */; };
+		F9561BE51C1FC6B300F59699 /* DrawFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE21C1FC6B300F59699 /* DrawFace.cpp */; };
+		F9561BE61C1FC6B300F59699 /* OpenCV_CLM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */; };
+		F9561BE71C1FC6B300F59699 /* StdAfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE41C1FC6B300F59699 /* StdAfx.cpp */; };
+		F9561C011C1FC6FF00F59699 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFA1C1FC6FF00F59699 /* tinystr.cpp */; };
+		F9561C021C1FC6FF00F59699 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFC1C1FC6FF00F59699 /* tinyxml.cpp */; };
+		F9561C031C1FC6FF00F59699 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFE1C1FC6FF00F59699 /* tinyxmlerror.cpp */; };
+		F9561C041C1FC6FF00F59699 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFF1C1FC6FF00F59699 /* tinyxmlparser.cpp */; };
+		F9561C091C1FC73100F59699 /* QuadProg_3.cc in Sources */ = {isa = PBXBuildFile; fileRef = F9561C071C1FC73100F59699 /* QuadProg_3.cc */; };
+		F9561C0A1C1FC73100F59699 /* QuadProg_136.cc in Sources */ = {isa = PBXBuildFile; fileRef = F9561C081C1FC73100F59699 /* QuadProg_136.cc */; };
+		F9561C131C1FC86000F59699 /* CLM_LoadModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */; };
+		F9561C141C1FC86000F59699 /* CLM_MakeInitial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */; };
+		F9561C151C1FC86000F59699 /* CLM_Optimize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */; };
+		F9561C161C1FC86000F59699 /* CLM_Search.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */; };
+		F9561C171C1FC86000F59699 /* CLM_SvmSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */; };
+		F9561C181C1FC86000F59699 /* CLM_Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C111C1FC86000F59699 /* CLM_Utils.cpp */; };
+		F9561C1C1C1FCC7E00F59699 /* omp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C1A1C1FCC7E00F59699 /* omp.cpp */; };
+		F9561C201C1FCFBE00F59699 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C1E1C1FCFBE00F59699 /* libopencv_core.dylib */; };
+		F9561C211C1FCFBE00F59699 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C1F1C1FCFBE00F59699 /* libopencv_highgui.dylib */; };
+		F9561C231C1FCFD900F59699 /* libopencv_objdetect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C221C1FCFD900F59699 /* libopencv_objdetect.dylib */; };
+		F9561C251C1FDC7100F59699 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C241C1FDC7100F59699 /* libopencv_imgproc.dylib */; };
+		F9561C281C1FDD9700F59699 /* CLMModel.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = F9561C271C1FDD9500F59699 /* CLMModel.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		F9561BD51C1FC50000F59699 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = Resources;
+			dstSubfolderSpec = 16;
 			files = (
+				F9561C281C1FDD9700F59699 /* CLMModel.xml in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		F9561BD71C1FC50000F59699 /* OpenCV-CLM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenCV-CLM"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9561BDA1C1FC50000F59699 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F9561BE21C1FC6B300F59699 /* DrawFace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawFace.cpp; sourceTree = "<group>"; };
+		F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenCV_CLM.cpp; sourceTree = "<group>"; };
+		F9561BE41C1FC6B300F59699 /* StdAfx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StdAfx.cpp; sourceTree = "<group>"; };
+		F9561BE91C1FC6C300F59699 /* StdAfx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StdAfx.h; sourceTree = "<group>"; };
+		F9561BFA1C1FC6FF00F59699 /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinystr.cpp; path = tinyxml/tinystr.cpp; sourceTree = "<group>"; };
+		F9561BFB1C1FC6FF00F59699 /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinystr.h; path = tinyxml/tinystr.h; sourceTree = "<group>"; };
+		F9561BFC1C1FC6FF00F59699 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = tinyxml/tinyxml.cpp; sourceTree = "<group>"; };
+		F9561BFD1C1FC6FF00F59699 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinyxml.h; path = tinyxml/tinyxml.h; sourceTree = "<group>"; };
+		F9561BFE1C1FC6FF00F59699 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = tinyxml/tinyxmlerror.cpp; sourceTree = "<group>"; };
+		F9561BFF1C1FC6FF00F59699 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = tinyxml/tinyxmlparser.cpp; sourceTree = "<group>"; };
+		F9561C071C1FC73100F59699 /* QuadProg_3.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadProg_3.cc; path = "QuadProg++/QuadProg_3.cc"; sourceTree = "<group>"; };
+		F9561C081C1FC73100F59699 /* QuadProg_136.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadProg_136.cc; path = "QuadProg++/QuadProg_136.cc"; sourceTree = "<group>"; };
+		F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_LoadModel.cpp; path = CLM_Lib/CLM_LoadModel.cpp; sourceTree = "<group>"; };
+		F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_MakeInitial.cpp; path = CLM_Lib/CLM_MakeInitial.cpp; sourceTree = "<group>"; };
+		F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Optimize.cpp; path = CLM_Lib/CLM_Optimize.cpp; sourceTree = "<group>"; };
+		F9561C0E1C1FC86000F59699 /* CLM_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLM_priv.h; path = CLM_Lib/CLM_priv.h; sourceTree = "<group>"; };
+		F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Search.cpp; path = CLM_Lib/CLM_Search.cpp; sourceTree = "<group>"; };
+		F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_SvmSearch.cpp; path = CLM_Lib/CLM_SvmSearch.cpp; sourceTree = "<group>"; };
+		F9561C111C1FC86000F59699 /* CLM_Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Utils.cpp; path = CLM_Lib/CLM_Utils.cpp; sourceTree = "<group>"; };
+		F9561C121C1FC86000F59699 /* CLM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLM.h; path = CLM_Lib/CLM.h; sourceTree = "<group>"; };
+		F9561C191C1FC99600F59699 /* QuadProg_136.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = QuadProg_136.hh; path = "QuadProg++/QuadProg_136.hh"; sourceTree = "<group>"; };
+		F9561C1A1C1FCC7E00F59699 /* omp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = omp.cpp; sourceTree = "<group>"; };
+		F9561C1B1C1FCC7E00F59699 /* omp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = omp.h; sourceTree = "<group>"; };
+		F9561C1D1C1FCDD200F59699 /* QuadProg_3.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = QuadProg_3.hh; path = "QuadProg++/QuadProg_3.hh"; sourceTree = "<group>"; };
+		F9561C1E1C1FCFBE00F59699 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_core.dylib; sourceTree = "<group>"; };
+		F9561C1F1C1FCFBE00F59699 /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
+		F9561C221C1FCFD900F59699 /* libopencv_objdetect.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_objdetect.dylib; path = ../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_objdetect.dylib; sourceTree = "<group>"; };
+		F9561C241C1FDC7100F59699 /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
+		F9561C271C1FDD9500F59699 /* CLMModel.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CLMModel.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +81,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9561C201C1FCFBE00F59699 /* libopencv_core.dylib in Frameworks */,
+				F9561C231C1FCFD900F59699 /* libopencv_objdetect.dylib in Frameworks */,
+				F9561C211C1FCFBE00F59699 /* libopencv_highgui.dylib in Frameworks */,
+				F9561C251C1FDC7100F59699 /* libopencv_imgproc.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +94,10 @@
 		F9561BCE1C1FC50000F59699 = {
 			isa = PBXGroup;
 			children = (
+				F9561C241C1FDC7100F59699 /* libopencv_imgproc.dylib */,
+				F9561C1E1C1FCFBE00F59699 /* libopencv_core.dylib */,
+				F9561C1F1C1FCFBE00F59699 /* libopencv_highgui.dylib */,
+				F9561C221C1FCFD900F59699 /* libopencv_objdetect.dylib */,
 				F9561BD91C1FC50000F59699 /* OpenCV-CLM */,
 				F9561BD81C1FC50000F59699 /* Products */,
 			);
@@ -57,9 +114,81 @@
 		F9561BD91C1FC50000F59699 /* OpenCV-CLM */ = {
 			isa = PBXGroup;
 			children = (
-				F9561BDA1C1FC50000F59699 /* main.cpp */,
+				F9561C261C1FDD9500F59699 /* Resources */,
+				F9561C061C1FC71500F59699 /* QuadProg */,
+				F9561BF91C1FC6E300F59699 /* TinyXML */,
+				F9561BEA1C1FC6D100F59699 /* CLM_Lib */,
+				F9561BE81C1FC6B600F59699 /* Header Files */,
+				F9561BE11C1FC67F00F59699 /* Source Files */,
 			);
 			path = "OpenCV-CLM";
+			sourceTree = "<group>";
+		};
+		F9561BE11C1FC67F00F59699 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				F9561BE21C1FC6B300F59699 /* DrawFace.cpp */,
+				F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */,
+				F9561BE41C1FC6B300F59699 /* StdAfx.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		F9561BE81C1FC6B600F59699 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				F9561BE91C1FC6C300F59699 /* StdAfx.h */,
+				F9561C1A1C1FCC7E00F59699 /* omp.cpp */,
+				F9561C1B1C1FCC7E00F59699 /* omp.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		F9561BEA1C1FC6D100F59699 /* CLM_Lib */ = {
+			isa = PBXGroup;
+			children = (
+				F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */,
+				F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */,
+				F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */,
+				F9561C0E1C1FC86000F59699 /* CLM_priv.h */,
+				F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */,
+				F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */,
+				F9561C111C1FC86000F59699 /* CLM_Utils.cpp */,
+				F9561C121C1FC86000F59699 /* CLM.h */,
+			);
+			name = CLM_Lib;
+			sourceTree = "<group>";
+		};
+		F9561BF91C1FC6E300F59699 /* TinyXML */ = {
+			isa = PBXGroup;
+			children = (
+				F9561BFA1C1FC6FF00F59699 /* tinystr.cpp */,
+				F9561BFB1C1FC6FF00F59699 /* tinystr.h */,
+				F9561BFC1C1FC6FF00F59699 /* tinyxml.cpp */,
+				F9561BFD1C1FC6FF00F59699 /* tinyxml.h */,
+				F9561BFE1C1FC6FF00F59699 /* tinyxmlerror.cpp */,
+				F9561BFF1C1FC6FF00F59699 /* tinyxmlparser.cpp */,
+			);
+			name = TinyXML;
+			sourceTree = "<group>";
+		};
+		F9561C061C1FC71500F59699 /* QuadProg */ = {
+			isa = PBXGroup;
+			children = (
+				F9561C191C1FC99600F59699 /* QuadProg_136.hh */,
+				F9561C071C1FC73100F59699 /* QuadProg_3.cc */,
+				F9561C1D1C1FCDD200F59699 /* QuadProg_3.hh */,
+				F9561C081C1FC73100F59699 /* QuadProg_136.cc */,
+			);
+			name = QuadProg;
+			sourceTree = "<group>";
+		};
+		F9561C261C1FDD9500F59699 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F9561C271C1FDD9500F59699 /* CLMModel.xml */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +247,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9561BDB1C1FC50000F59699 /* main.cpp in Sources */,
+				F9561C021C1FC6FF00F59699 /* tinyxml.cpp in Sources */,
+				F9561BE61C1FC6B300F59699 /* OpenCV_CLM.cpp in Sources */,
+				F9561C131C1FC86000F59699 /* CLM_LoadModel.cpp in Sources */,
+				F9561C091C1FC73100F59699 /* QuadProg_3.cc in Sources */,
+				F9561C181C1FC86000F59699 /* CLM_Utils.cpp in Sources */,
+				F9561BE71C1FC6B300F59699 /* StdAfx.cpp in Sources */,
+				F9561C1C1C1FCC7E00F59699 /* omp.cpp in Sources */,
+				F9561C151C1FC86000F59699 /* CLM_Optimize.cpp in Sources */,
+				F9561BE51C1FC6B300F59699 /* DrawFace.cpp in Sources */,
+				F9561C161C1FC86000F59699 /* CLM_Search.cpp in Sources */,
+				F9561C171C1FC86000F59699 /* CLM_SvmSearch.cpp in Sources */,
+				F9561C041C1FC6FF00F59699 /* tinyxmlparser.cpp in Sources */,
+				F9561C011C1FC6FF00F59699 /* tinystr.cpp in Sources */,
+				F9561C0A1C1FC73100F59699 /* QuadProg_136.cc in Sources */,
+				F9561C141C1FC86000F59699 /* CLM_MakeInitial.cpp in Sources */,
+				F9561C031C1FC6FF00F59699 /* tinyxmlerror.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +351,11 @@
 		F9561BDF1C1FC50000F59699 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -214,6 +363,11 @@
 		F9561BE01C1FC50000F59699 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

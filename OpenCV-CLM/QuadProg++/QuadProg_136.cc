@@ -39,9 +39,6 @@
 
 #include "stdafx.h"
 
-#include "windows.h"
-
-
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -79,7 +76,7 @@ static void print_ivector(char* name, int v[], int n);
 extern DWORD CountsPerSec;
 static LARGE_INTEGER L1;
 static LARGE_INTEGER L2;
-static float time;
+static float _time;
 
 #include "omp.h"
 
@@ -136,7 +133,7 @@ QueryPerformanceCounter(&L1);
 #endif
 
 QueryPerformanceCounter(&L2);
-time = (float)((L2.LowPart - L1.LowPart)*1000.0)/CountsPerSec*10;
+_time = (float)((L2.LowPart - L1.LowPart)*1000.0)/CountsPerSec*10;
 //printf("time = %4.1f ", time);	
 	/* initialize the matrix R */
 	for (i = 0; i < n; i++)
@@ -257,7 +254,7 @@ l1:	iter++;
 			sum += CI[j][i] * x[j];
 		sum += ci0[i];
 		s[i] = sum;
-		psi += min(0.0, sum);
+		psi += fmin(0.0, sum);
 	}
 #ifdef TRACE_SOLVER
   print_vector("s", s, mi);
@@ -350,7 +347,7 @@ l2a:/* Step 2a: determine step direction */
     t2 = inf; /* +inf */
   
   /* the step is chosen as the minimum of t1 and t2 */
-  t = min(t1, t2);
+  t = fmin(t1, t2);
 #ifdef TRACE_SOLVER
   std::cerr << "Step sizes: " << t << " (t1 = " << t1 << ", t2 = " << t2 << ") ";
 #endif

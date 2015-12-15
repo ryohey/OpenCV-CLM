@@ -19,22 +19,13 @@
 
 #include "omp.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "cv.h"
 #include "highgui.h"
 
 #include "clm.h"
 #include "clm_priv.h"
 
-#ifdef __cplusplus
-}
-#endif
-
-#include "..\QuadProg++\QuadProg_3.hh"
+#include "QuadProg_3.hh"
 
 static void CopyImageToMat(IplImage *pImg, CvMat *pMat);
 static void DumpResponse(CvMat * r);

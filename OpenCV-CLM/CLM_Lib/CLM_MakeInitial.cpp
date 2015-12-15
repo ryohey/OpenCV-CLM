@@ -11,19 +11,11 @@
 
 #include "stdafx.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "cv.h"
 #include "highgui.h"
 
 #include "clm.h"
 #include "clm_priv.h"
-
-#ifdef __cplusplus
-}
-#endif
 
 int CLM_MakeInitialShape(CLM_MODEL *Model, IplImage *Image, double x, double y, double w, double h, double rot, CLM_SI* Initial)
 {

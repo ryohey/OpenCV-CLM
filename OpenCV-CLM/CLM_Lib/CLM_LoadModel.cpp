@@ -17,22 +17,13 @@
 
 #include "stdafx.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "cv.h"
 #include "highgui.h"
 
 #include "clm.h"
 #include "clm_priv.h"
 
-#ifdef __cplusplus
-}
-#endif
-
-
-#include "..\tinyxml\tinyxml.h"
+#include "tinyxml.h"
 
 static int ReadVecFromString(const char *str, float *f, int count);
 static int ReadMatFromString(const char *str, CvMat *Mat);

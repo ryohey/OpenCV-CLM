@@ -17,18 +17,11 @@
 
 
 #include "stdafx.h"
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include "cv.h"
 #include "highgui.h"
 
-#include "CLM_Lib\clm.h"
-
-#ifdef __cplusplus
-}
-#endif
+#include "clm.h"
 
 static int orFace[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 24, 23, 22, 21, 0};
 static int orEbrowL[] = {24, 23, 22, 21, 26, 25, 24};

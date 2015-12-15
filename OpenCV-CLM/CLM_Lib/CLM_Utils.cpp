@@ -17,19 +17,11 @@
 
 #include "stdafx.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "cv.h"
 #include "highgui.h"
 
 #include "clm.h"
 #include "clm_priv.h"
-
-#ifdef __cplusplus
-}
-#endif
 
 int CLM_Procrustes0(float *pdat, float *pbase, int numPts)
 {
