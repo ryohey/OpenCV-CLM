@@ -29,14 +29,14 @@ extern DWORD CountsPerSec;
 
 static void DumpResponse(CvMat * r);
 
-int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final, CLM_OPTIONS *Options)
+int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final, CLM_OPTIONS& Options)
 {
 	// Prepare:
 	auto Inter = Initial;
 	Inter.xy = cvCloneMat(Initial.xy);
 	Inter.AlignedXY = cvCloneMat(Initial.AlignedXY);
 
-	int nIterations = Options?Options->NumInterations:NUM_ITER;
+	int nIterations = Options.NumInterations;
 	nIterations = nIterations?nIterations:NUM_ITER;
 	
 	// Do search:

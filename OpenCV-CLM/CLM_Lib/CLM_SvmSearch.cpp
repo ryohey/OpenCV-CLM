@@ -31,15 +31,15 @@ static void DumpResponse(CvMat * r);
 static void DumpWeights(CvMat * r);
 
 
-double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS * Options)
+double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS& Options)
 {
 	auto& ShapeModel = pModel.ShapeModel;
 	auto& PatchModel = pModel.PatchModel;
 	auto& pMeanShape = ShapeModel.MeanShape;
 
 	int cw, ch;
-	cw = Options->SearchRegion[0] + pModel.PatchModel.PatchSize[0];
-	ch = Options->SearchRegion[1] + pModel.PatchModel.PatchSize[1];
+	cw = Options.SearchRegion[0] + pModel.PatchModel.PatchSize[0];
+	ch = Options.SearchRegion[1] + pModel.PatchModel.PatchSize[1];
 
 	///////////////////////////////////////
 	// Step 1, align current shape to mean shape:
@@ -69,7 +69,7 @@ double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *Quad
 
 		float m[6];
 		CvMat M = cvMat( 2, 3, CV_32F, m );
-        cv::Mat Response(Options->SearchRegion[1] + 1, Options->SearchRegion[0] + 1, CV_32FC1);
+        cv::Mat Response(Options.SearchRegion[1] + 1, Options.SearchRegion[0] + 1, CV_32FC1);
         cv::Mat weights = PatchModel.WeightMats[i];
 		
 		float x0c = *(pxy + i*2), y0c = *(pxy + i*2 + 1);

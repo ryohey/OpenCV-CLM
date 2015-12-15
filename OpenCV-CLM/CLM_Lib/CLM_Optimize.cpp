@@ -37,7 +37,7 @@ static void DumpCI(double *ci, int len);
 
 extern DWORD CountsPerSec;
 
-float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS * Options)
+float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS& Options)
 {
 	// Step 0: Prepare...
 	int NumX = Model.PatchModel.NumPatches*2;
@@ -70,7 +70,7 @@ float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS * Op
 	//////////////////////////////////////////////////////////////////
 	// 2.1, basexy:
 	float newxy[256];
-	auto w0 = (float)(Options->SearchRegion[0] + 1)/2;
+	auto w0 = (float)(Options.SearchRegion[0] + 1)/2;
 
 	auto& pMeanShape = Model.ShapeModel.MeanShape;
 	auto pMeanxy = pMeanShape->data.fl;

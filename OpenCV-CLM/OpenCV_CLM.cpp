@@ -97,7 +97,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 	Options.SearchRegion[0] = 16;
 	Options.SearchRegion[1] = 16;
 
-   	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, &Options);
+   	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, Options);
 	DrawFaceShape(input, Si_Final.xy);
 
     #if WRITE_VIDEO
@@ -128,7 +128,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 		Options.NumInterations = 10;
 		//Options.MaxIterError = 0.015;
     	
-    	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, &Options);
+    	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, Options);
 		//CLM_DumpSi(&Si_Init);
 		//CLM_DumpSi(&Si_Final);
 		
