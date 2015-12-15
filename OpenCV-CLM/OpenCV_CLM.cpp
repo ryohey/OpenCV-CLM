@@ -84,8 +84,8 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 	int width = 270;
 	int height = 270;
 
-	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, &Si_Init);
-	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, &Si_Final);
+	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Init);
+	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Final);
     
     ////////////////////////
     // Do search with initial guess

@@ -31,7 +31,7 @@ static void DumpResponse(CvMat * r);
 static void DumpWeights(CvMat * r);
 
 
-double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS * Options)
+double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS * Options)
 {
 	auto& ShapeModel = pModel.ShapeModel;
 	auto& PatchModel = pModel.PatchModel;
@@ -44,12 +44,12 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, cv::Mat& Image, float *Quad
 	///////////////////////////////////////
 	// Step 1, align current shape to mean shape:
 	///////////////////////////////////////
-	CLM_align_data(Si->xy->data.fl, pMeanShape->data.fl, ShapeModel.NumPtsPerSample, Si->AlignedXY->data.fl, Si->transform);
+	CLM_align_data(Si.xy->data.fl, pMeanShape->data.fl, ShapeModel.NumPtsPerSample, Si.AlignedXY->data.fl, Si.transform);
 
 	// Invert transform matrix...
 	float tm[9], invtm[9];
-	tm[0] = Si->transform[0]; tm[1] = Si->transform[1]; tm[2] = Si->transform[2]; 
-	tm[3] = -Si->transform[1]; tm[4] = Si->transform[0]; tm[5] = Si->transform[3];
+	tm[0] = Si.transform[0]; tm[1] = Si.transform[1]; tm[2] = Si.transform[2];
+	tm[3] = -Si.transform[1]; tm[4] = Si.transform[0]; tm[5] = Si.transform[3];
 	tm[6] = 0; tm[7] = 0; tm[8] = 1;
     cv::Mat MatTm(3, 3, CV_32FC1, tm);
     cv::Mat invMatTm(3, 3, CV_32FC1, invtm);
@@ -59,7 +59,7 @@ double* CLM_SvmSearch(CLM_SI* Si, CLM_MODEL& pModel, cv::Mat& Image, float *Quad
 	// Step 2, crop patches around each feature point position, 
 	// do SVM classification, and quadratic fitting.
 	//////////////////////////////////////////////////////////////
-	auto pxy = Si->AlignedXY->data.fl;
+	auto pxy = Si.AlignedXY->data.fl;
 
 	#pragma omp parallel for // This is where OpenMP shines.
 	for(int i=0;i<ShapeModel.NumPtsPerSample;i++)

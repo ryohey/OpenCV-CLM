@@ -44,9 +44,9 @@ int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final,
 	
 	for(int iter = 0; iter < nIterations; iter++)
 	{
-		CLM_SvmSearch(&Inter, Model, Image, coeffs, Options);
+		CLM_SvmSearch(Inter, Model, Image, coeffs, Options);
 
-		CLM_Optimize(Model, &Inter, coeffs, Options);
+		CLM_Optimize(Model, Inter, coeffs, Options);
 	}
 	//CLM_DumpSi(&Inter);
 	

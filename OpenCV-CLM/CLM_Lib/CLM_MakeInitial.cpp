@@ -17,7 +17,7 @@
 #include "clm.h"
 #include "clm_priv.h"
 
-int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, CLM_SI* Initial)
+int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, CLM_SI& Initial)
 {
 	float maxx = -1000, minx = 1000, maxy = -1000, miny = 1000;
 
@@ -112,12 +112,12 @@ int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, d
 
 	// Assemble return value:
 	
-	Initial->xy = cvCreateMat(NumPts, 2, CV_32FC1);
-	Initial->AlignedXY = cvCreateMat(NumPts, 2, CV_32FC1);
+	Initial.xy = cvCreateMat(NumPts, 2, CV_32FC1);
+	Initial.AlignedXY = cvCreateMat(NumPts, 2, CV_32FC1);
 
 	step = Outxy.step/sizeof(float);
 
-	auto pdst = Initial->xy->data.fl;
+	auto pdst = Initial.xy->data.fl;
 	
 	for (int i=0; i<NumPts;i++)
 	{
@@ -125,10 +125,10 @@ int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, d
 		*pdst++ = Outxy.at<float>(i + step) + centery;
 	}
 
-	Initial->transform[0] = (float)(scf*cos(rot));
-	Initial->transform[1] = (float)(scf*sin(rot));
-	Initial->transform[2] = centerx;
-	Initial->transform[3] = centery;
+	Initial.transform[0] = (float)(scf*cos(rot));
+	Initial.transform[1] = (float)(scf*sin(rot));
+	Initial.transform[2] = centerx;
+	Initial.transform[3] = centery;
 	
 	return 0;
 }

@@ -37,7 +37,7 @@ static void DumpCI(double *ci, int len);
 
 extern DWORD CountsPerSec;
 
-float CLM_Optimize(CLM_MODEL& Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Options)
+float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS * Options)
 {
 	// Step 0: Prepare...
 	int NumX = Model.PatchModel.NumPatches*2;
@@ -75,8 +75,8 @@ float CLM_Optimize(CLM_MODEL& Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	auto& pMeanShape = Model.ShapeModel.MeanShape;
 	auto pMeanxy = pMeanShape->data.fl;
 	
-	auto alignedxy = Si->AlignedXY->data.fl;
-	auto tform = Si->transform;
+	auto alignedxy = Si.AlignedXY->data.fl;
+	auto tform = Si.transform;
 	
 	float basexy[256];
 
@@ -209,7 +209,7 @@ float CLM_Optimize(CLM_MODEL& Model, CLM_SI* Si, float *coeffs, CLM_OPTIONS * Op
 	///////////////////////////////////////////////
 	// Step 7, align back to image coordinate.
 	///////////////////////////////////////////////
-	CLM_align_data_inverse(newxy, tform, Model.ShapeModel.NumPtsPerSample, Si->xy->data.fl);
+	CLM_align_data_inverse(newxy, tform, Model.ShapeModel.NumPtsPerSample, Si.xy->data.fl);
 
 
 	return 0.0f;
