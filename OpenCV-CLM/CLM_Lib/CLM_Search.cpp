@@ -31,19 +31,15 @@ static LARGE_INTEGER L2;
 
 static void DumpResponse(CvMat * r);
 
-int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI *Initial, CLM_SI *Final, CLM_OPTIONS *Options)
+int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI& Initial, CLM_SI& Final, CLM_OPTIONS *Options)
 {
 	auto& pShapeData = Model.ShapeModel;
 	auto& pTemplateData = Model.PatchModel;
 
-	int iter;
-
-	CLM_SI Inter;
-
 	// Prepare:
-	Inter = *Initial;
-	Inter.xy = cvCloneMat(Initial->xy);
-	Inter.AlignedXY = cvCloneMat(Initial->AlignedXY);
+	auto Inter = Initial;
+	Inter.xy = cvCloneMat(Initial.xy);
+	Inter.AlignedXY = cvCloneMat(Initial.AlignedXY);
 
 	int nIterations = Options?Options->NumInterations:NUM_ITER;
 	nIterations = nIterations?nIterations:NUM_ITER;
@@ -52,7 +48,7 @@ int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI *Initial, CLM_SI *Final,
 	float coeffs[8*100];
 	
 	int NumPatches = pTemplateData.NumPatches;
-	for(iter = 0; iter < nIterations; iter++)
+	for(int iter = 0; iter < nIterations; iter++)
 	{
 		CLM_SvmSearch(&Inter, Model, Image, coeffs, Options);
 
@@ -61,7 +57,7 @@ int CLM_Search(CLM_MODEL& Model, cv::Mat& Image, CLM_SI *Initial, CLM_SI *Final,
 	//CLM_DumpSi(&Inter);
 	
 	// Assemble return value:
-	CLM_CopySi(Final, &Inter);
+	CLM_CopySi(Final, Inter);
 
 	// Clean up: ... should make Si a class...
 	cvReleaseMat(&Inter.xy);

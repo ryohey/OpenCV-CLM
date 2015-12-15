@@ -97,7 +97,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 	Options.SearchRegion[0] = 16;
 	Options.SearchRegion[1] = 16;
 
-   	ret = CLM_Search(CLM_Model, searchimg, &Si_Init, &Si_Final, &Options);
+   	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, &Options);
 	DrawFaceShape(input, Si_Final.xy);
 
     #if WRITE_VIDEO
@@ -117,7 +117,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
     while( key != 'q' ) 
 	{
 		i++;
-		CLM_CopySi(&Si_Init, &Si_Final);
+		CLM_CopySi(Si_Init, Si_Final);
 		sprintf(imgName, "%s/franck_%05d.jpg", dirName, i);
         input = cvLoadImage(imgName);
         cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
@@ -128,7 +128,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 		Options.NumInterations = 10;
 		//Options.MaxIterError = 0.015;
     	
-    	ret = CLM_Search(CLM_Model, searchimg, &Si_Init, &Si_Final, &Options);
+    	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, &Options);
 		//CLM_DumpSi(&Si_Init);
 		//CLM_DumpSi(&Si_Final);
 		

@@ -190,28 +190,29 @@ int CLM_align_data_inverse(float *pdat, float *tform, int numPts, float *pout)
 	return 0;
 }
 
-int CLM_CopySi(CLM_SI *dst, CLM_SI *src)
+int CLM_CopySi(CLM_SI& dst, CLM_SI& src)
 {
-	cvCopy(src->xy, dst->xy);
-	cvCopy(src->AlignedXY, dst->AlignedXY);
+	cvCopy(src.xy, dst.xy);
+	cvCopy(src.
+           AlignedXY, dst.AlignedXY);
 
 	for(int i=0;i<4;i++)
 	{
-		dst->transform[i] = src->transform[i];
+		dst.transform[i] = src.transform[i];
 	}
 
 	return 0;
 }
 
-int CLM_DumpSi(CLM_SI *si)
+int CLM_DumpSi(CLM_SI& si)
 {
 	//printf("center: %d, %d\n", (int)si->center[0], (int)si->center[1]);
 	//printf("rotation: %f, scale: %f\n", si->rotation, si->scale);
 FILE *psi = fopen("si.txt", "w");
 
-	float *pdat = si->xy->data.fl;
+	float *pdat = si.xy->data.fl;
 	float x, y;
-	for(int i=0;i<si->xy->rows;i++)
+	for(int i=0;i<si.xy->rows;i++)
 	{
 		x = *pdat++;
 		y = *pdat++;
