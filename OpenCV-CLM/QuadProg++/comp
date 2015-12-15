@@ -1,0 +1,1 @@
+g++ -O -o quadprog++ main.cc QuadProg++.cc
