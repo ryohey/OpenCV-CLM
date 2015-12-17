@@ -16,8 +16,6 @@ namespace CLM {
     int alignDataInverse(float *pdat, float *tform, int numPts, float *pout);
     int copySi(Si& dst, Si& src);
     int dumpSi(Si& si);
-    int startTimer(int id);
-    long stopTimer(int id);
 }
 
 #endif /* utils_h */

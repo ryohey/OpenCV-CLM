@@ -15,8 +15,6 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-
 #include "cv.h"
 #include "highgui.h"
 
@@ -24,8 +22,6 @@
 #include "svmSearch.h"
 #include "optimize.h"
 #include "utils.h"
-
-extern DWORD CountsPerSec;
 
 #define NUM_ITER		10		// Default number of iterations.
 

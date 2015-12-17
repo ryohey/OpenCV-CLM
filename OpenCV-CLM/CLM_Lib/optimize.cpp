@@ -15,8 +15,6 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-
 #include "math.h"
 
 #include "cv.h"
@@ -37,8 +35,6 @@ namespace CLM {
     void dumpVec(float *vec, int len);
     void dumpCI(double *ci, int len);
 }
-
-extern DWORD CountsPerSec;
 
 float CLM::optimize(Model& Model, Si& Si, float *coeffs, Options& Options)
 {

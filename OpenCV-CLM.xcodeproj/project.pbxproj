@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F9561BE51C1FC6B300F59699 /* DrawFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE21C1FC6B300F59699 /* DrawFace.cpp */; };
 		F9561BE61C1FC6B300F59699 /* OpenCV_CLM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */; };
-		F9561BE71C1FC6B300F59699 /* StdAfx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BE41C1FC6B300F59699 /* StdAfx.cpp */; };
 		F9561C011C1FC6FF00F59699 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFA1C1FC6FF00F59699 /* tinystr.cpp */; };
 		F9561C021C1FC6FF00F59699 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFC1C1FC6FF00F59699 /* tinyxml.cpp */; };
 		F9561C031C1FC6FF00F59699 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFE1C1FC6FF00F59699 /* tinyxmlerror.cpp */; };
@@ -55,8 +54,6 @@
 		F9561BD71C1FC50000F59699 /* OpenCV-CLM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenCV-CLM"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9561BE21C1FC6B300F59699 /* DrawFace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawFace.cpp; sourceTree = "<group>"; };
 		F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenCV_CLM.cpp; sourceTree = "<group>"; };
-		F9561BE41C1FC6B300F59699 /* StdAfx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StdAfx.cpp; sourceTree = "<group>"; };
-		F9561BE91C1FC6C300F59699 /* StdAfx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StdAfx.h; sourceTree = "<group>"; };
 		F9561BFA1C1FC6FF00F59699 /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinystr.cpp; path = tinyxml/tinystr.cpp; sourceTree = "<group>"; };
 		F9561BFB1C1FC6FF00F59699 /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinystr.h; path = tinyxml/tinystr.h; sourceTree = "<group>"; };
 		F9561BFC1C1FC6FF00F59699 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = tinyxml/tinyxml.cpp; sourceTree = "<group>"; };
@@ -136,7 +133,6 @@
 			children = (
 				F9561BE21C1FC6B300F59699 /* DrawFace.cpp */,
 				F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */,
-				F9561BE41C1FC6B300F59699 /* StdAfx.cpp */,
 			);
 			name = "Source Files";
 			sourceTree = "<group>";
@@ -144,7 +140,6 @@
 		F9561BE81C1FC6B600F59699 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
-				F9561BE91C1FC6C300F59699 /* StdAfx.h */,
 				F9561C1A1C1FCC7E00F59699 /* omp.cpp */,
 				F9561C1B1C1FCC7E00F59699 /* omp.h */,
 			);
@@ -266,7 +261,6 @@
 				F9561C131C1FC86000F59699 /* loadModel.cpp in Sources */,
 				F9561C091C1FC73100F59699 /* QuadProg_3.cc in Sources */,
 				F9561C181C1FC86000F59699 /* utils.cpp in Sources */,
-				F9561BE71C1FC6B300F59699 /* StdAfx.cpp in Sources */,
 				F9561C1C1C1FCC7E00F59699 /* omp.cpp in Sources */,
 				F9561C151C1FC86000F59699 /* optimize.cpp in Sources */,
 				F9561BE51C1FC6B300F59699 /* DrawFace.cpp in Sources */,

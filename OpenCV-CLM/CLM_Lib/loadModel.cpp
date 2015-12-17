@@ -15,8 +15,6 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-
 #include "cv.h"
 #include "highgui.h"
 

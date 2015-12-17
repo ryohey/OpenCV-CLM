@@ -13,20 +13,14 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-
 #include <stdio.h>
+#include <chrono>
 #include "cv.h"
 #include "highgui.h"
 
 #include "CLM.h"
 
 using namespace CLM;
-
-LARGE_INTEGER PerfFreq;
-DWORD CountsPerSec;
-static LARGE_INTEGER L1;
-static LARGE_INTEGER L2;
 
 const static char *OutputWinName = "Constrained Local Model Demo - OpenCV";
 
@@ -125,7 +119,7 @@ int pic_vid_main(Model& Model, const char *dirName)
         cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
         input.copyTo(DispImage);
         
-        QueryPerformanceCounter(&L1);
+        auto startTime = std::chrono::system_clock::now();
 
 		Options.NumInterations = 10;
 		//Options.MaxIterError = 0.015;
@@ -133,10 +127,11 @@ int pic_vid_main(Model& Model, const char *dirName)
     	ret = search(Model, searchimg, Si_Init, Si_Final, Options);
 		//dumpSi(&Si_Init);
 		//dumpSi(&Si_Final);
-		
-        QueryPerformanceCounter(&L2);
-        float time = (float)(L2.LowPart - L1.LowPart)*1000.0f/CountsPerSec;
-        printf("Search time: %4.1f\n ", time);
+        
+        auto endTime = std::chrono::system_clock::now();
+        auto time = std::chrono::duration_cast<std::chrono::milliseconds>(startTime - endTime).count();
+
+        printf("Search time: %4.1lld\n ", time);
 
         cv::Mat DispImage_(DispImage);
 		drawFaceShape(DispImage_, Si_Final.xy);
@@ -173,11 +168,6 @@ int main(int argc, char **argv) {
     auto xmlFileName= (resourceDir + "/CLMModel.xml").c_str();
 
 	omp_set_num_threads(CURRENT_NUM_THREADS);
-
-
-	QueryPerformanceFrequency(&PerfFreq);
-	CountsPerSec = PerfFreq.LowPart;
-
     
 	printf("Loading CLM Model file %s ...", xmlFileName);
 

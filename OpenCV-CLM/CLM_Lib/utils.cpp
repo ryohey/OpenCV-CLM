@@ -15,8 +15,6 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "stdafx.h"
-
 #include "cv.h"
 #include "highgui.h"
 
@@ -223,23 +221,4 @@ FILE *psi = fopen("si.txt", "w");
 	fclose(psi);
 
 	return 0;
-}
-
-
-static SYSTEMTIME start[10];
-int CLM::startTimer(int i)
-{
-
-	GetSystemTime(&start[i]);	
-	
-	return 0;
-}
-
-long CLM::stopTimer(int i)
-{
-	SYSTEMTIME now;
-	
-	GetSystemTime(&now);
-
-	return (now.wSecond-start[i].wSecond)*1000+(now.wMilliseconds-start[i].wMilliseconds);
 }

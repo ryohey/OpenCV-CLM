@@ -36,9 +36,6 @@
  3. Redefined MATRIX_DIM to MATRIX_DIM_440
  ****************************************/
 
-
-#include "stdafx.h"
-
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -72,16 +69,11 @@ static void print_rmatrix(char* name, double A[][MATRIX_DIM_440], int n, int m);
 static void print_vector(char* name, double v[], int n);
 static void print_ivector(char* name, int v[], int n);
 
-// The Solving function, implementing the Goldfarb-Idnani method
-extern DWORD CountsPerSec;
-static LARGE_INTEGER L1;
-static LARGE_INTEGER L2;
-static float _time;
-
 #include "omp.h"
 
 #define NUM_THREADS 2
 
+// The Solving function, implementing the Goldfarb-Idnani method
 double solve_quadprog_136(double G[][MATRIX_DIM_440], double g0[], int n, 
                       double CE[][MATRIX_DIM_440], double ce0[], int p, 
                       double CI[][MATRIX_DIM_440], double ci0[], int m,
@@ -123,8 +115,6 @@ double solve_quadprog_136(double G[][MATRIX_DIM_440], double g0[], int n,
 	{
 		c1 += G[i][i];
 	}
-  
-QueryPerformanceCounter(&L1);	
 
 	/* decompose the matrix G in the form L^T L */
 	cholesky_decomposition(G, n);
@@ -132,8 +122,6 @@ QueryPerformanceCounter(&L1);
   print_matrix("G", G, n);
 #endif
 
-QueryPerformanceCounter(&L2);
-_time = (float)((L2.LowPart - L1.LowPart)*1000.0)/CountsPerSec*10;
 //printf("time = %4.1f ", time);	
 	/* initialize the matrix R */
 	for (i = 0; i < n; i++)
