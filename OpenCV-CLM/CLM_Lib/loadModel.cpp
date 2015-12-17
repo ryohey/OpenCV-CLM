@@ -16,7 +16,6 @@
 ////////////////////////////////////////////////////////
 
 #include "cv.h"
-#include "highgui.h"
 
 #include "loadModel.h"
 

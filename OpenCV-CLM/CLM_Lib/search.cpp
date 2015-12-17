@@ -16,8 +16,6 @@
 ////////////////////////////////////////////////////////
 
 #include "cv.h"
-#include "highgui.h"
-
 #include "search.h"
 #include "svmSearch.h"
 #include "optimize.h"

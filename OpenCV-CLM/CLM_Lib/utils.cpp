@@ -16,8 +16,6 @@
 ////////////////////////////////////////////////////////
 
 #include "cv.h"
-#include "highgui.h"
-
 #include "utils.h"
 
 using namespace CLM;

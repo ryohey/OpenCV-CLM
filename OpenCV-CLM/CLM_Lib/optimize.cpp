@@ -16,17 +16,12 @@
 ////////////////////////////////////////////////////////
 
 #include "math.h"
-
 #include "cv.h"
-#include "highgui.h"
-
 #include "utils.h"
 #include "optimize.h"
+#include "QuadProg_136.hh"
 
 extern FILE * fpout;
-
-
-#include "QuadProg_136.hh"
 
 using namespace CLM;
 

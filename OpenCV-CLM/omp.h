@@ -3,7 +3,6 @@
 //  OpenCV-CLM
 //
 //  Created by Ryohei Kameyama on 2015/12/15.
-//  Copyright © 2015年 codingcafe.jp. All rights reserved.
 //
 
 #ifndef omp_hpp

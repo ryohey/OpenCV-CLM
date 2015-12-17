@@ -10,8 +10,6 @@
 ////////////////////////////////////////////////////////////
 
 #include "cv.h"
-#include "highgui.h"
-
 #include "makeInitial.h"
 
 using namespace CLM;

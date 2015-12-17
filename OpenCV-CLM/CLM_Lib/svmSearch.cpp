@@ -18,7 +18,6 @@
 #include "omp.h"
 
 #include "cv.h"
-#include "highgui.h"
 
 #include "utils.h"
 #include "svmSearch.h"
