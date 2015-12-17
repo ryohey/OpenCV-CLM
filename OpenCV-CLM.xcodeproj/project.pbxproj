@@ -16,12 +16,12 @@
 		F9561C041C1FC6FF00F59699 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561BFF1C1FC6FF00F59699 /* tinyxmlparser.cpp */; };
 		F9561C091C1FC73100F59699 /* QuadProg_3.cc in Sources */ = {isa = PBXBuildFile; fileRef = F9561C071C1FC73100F59699 /* QuadProg_3.cc */; };
 		F9561C0A1C1FC73100F59699 /* QuadProg_136.cc in Sources */ = {isa = PBXBuildFile; fileRef = F9561C081C1FC73100F59699 /* QuadProg_136.cc */; };
-		F9561C131C1FC86000F59699 /* CLM_LoadModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */; };
-		F9561C141C1FC86000F59699 /* CLM_MakeInitial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */; };
-		F9561C151C1FC86000F59699 /* CLM_Optimize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */; };
-		F9561C161C1FC86000F59699 /* CLM_Search.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */; };
-		F9561C171C1FC86000F59699 /* CLM_SvmSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */; };
-		F9561C181C1FC86000F59699 /* CLM_Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C111C1FC86000F59699 /* CLM_Utils.cpp */; };
+		F9561C131C1FC86000F59699 /* loadModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0B1C1FC86000F59699 /* loadModel.cpp */; };
+		F9561C141C1FC86000F59699 /* makeInitial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0C1C1FC86000F59699 /* makeInitial.cpp */; };
+		F9561C151C1FC86000F59699 /* optimize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0D1C1FC86000F59699 /* optimize.cpp */; };
+		F9561C161C1FC86000F59699 /* search.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C0F1C1FC86000F59699 /* search.cpp */; };
+		F9561C171C1FC86000F59699 /* svmSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C101C1FC86000F59699 /* svmSearch.cpp */; };
+		F9561C181C1FC86000F59699 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C111C1FC86000F59699 /* utils.cpp */; };
 		F9561C1C1C1FCC7E00F59699 /* omp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F9561C1A1C1FCC7E00F59699 /* omp.cpp */; };
 		F9561C201C1FCFBE00F59699 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C1E1C1FCFBE00F59699 /* libopencv_core.dylib */; };
 		F9561C211C1FCFBE00F59699 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F9561C1F1C1FCFBE00F59699 /* libopencv_highgui.dylib */; };
@@ -44,6 +44,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D9B113311C2266F800D030D2 /* loadModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = loadModel.h; path = CLM_Lib/loadModel.h; sourceTree = "<group>"; };
+		D9B113321C22677600D030D2 /* makeInitial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = makeInitial.h; path = CLM_Lib/makeInitial.h; sourceTree = "<group>"; };
+		D9B113331C22679700D030D2 /* optimize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = optimize.h; path = CLM_Lib/optimize.h; sourceTree = "<group>"; };
+		D9B113341C22680100D030D2 /* search.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = search.h; path = CLM_Lib/search.h; sourceTree = "<group>"; };
+		D9B113351C22683500D030D2 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = utils.h; path = CLM_Lib/utils.h; sourceTree = "<group>"; };
+		D9B113361C2268BA00D030D2 /* structs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = structs.h; path = CLM_Lib/structs.h; sourceTree = "<group>"; };
+		D9B113371C2268F900D030D2 /* svmSearch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = svmSearch.h; path = CLM_Lib/svmSearch.h; sourceTree = "<group>"; };
+		D9B113381C226A5E00D030D2 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = CLM_Lib/config.h; sourceTree = "<group>"; };
 		F9561BD71C1FC50000F59699 /* OpenCV-CLM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenCV-CLM"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9561BE21C1FC6B300F59699 /* DrawFace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawFace.cpp; sourceTree = "<group>"; };
 		F9561BE31C1FC6B300F59699 /* OpenCV_CLM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenCV_CLM.cpp; sourceTree = "<group>"; };
@@ -57,13 +65,12 @@
 		F9561BFF1C1FC6FF00F59699 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = tinyxml/tinyxmlparser.cpp; sourceTree = "<group>"; };
 		F9561C071C1FC73100F59699 /* QuadProg_3.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadProg_3.cc; path = "QuadProg++/QuadProg_3.cc"; sourceTree = "<group>"; };
 		F9561C081C1FC73100F59699 /* QuadProg_136.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadProg_136.cc; path = "QuadProg++/QuadProg_136.cc"; sourceTree = "<group>"; };
-		F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_LoadModel.cpp; path = CLM_Lib/CLM_LoadModel.cpp; sourceTree = "<group>"; };
-		F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_MakeInitial.cpp; path = CLM_Lib/CLM_MakeInitial.cpp; sourceTree = "<group>"; };
-		F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Optimize.cpp; path = CLM_Lib/CLM_Optimize.cpp; sourceTree = "<group>"; };
-		F9561C0E1C1FC86000F59699 /* CLM_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLM_priv.h; path = CLM_Lib/CLM_priv.h; sourceTree = "<group>"; };
-		F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Search.cpp; path = CLM_Lib/CLM_Search.cpp; sourceTree = "<group>"; };
-		F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_SvmSearch.cpp; path = CLM_Lib/CLM_SvmSearch.cpp; sourceTree = "<group>"; };
-		F9561C111C1FC86000F59699 /* CLM_Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CLM_Utils.cpp; path = CLM_Lib/CLM_Utils.cpp; sourceTree = "<group>"; };
+		F9561C0B1C1FC86000F59699 /* loadModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loadModel.cpp; path = CLM_Lib/loadModel.cpp; sourceTree = "<group>"; };
+		F9561C0C1C1FC86000F59699 /* makeInitial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = makeInitial.cpp; path = CLM_Lib/makeInitial.cpp; sourceTree = "<group>"; };
+		F9561C0D1C1FC86000F59699 /* optimize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = optimize.cpp; path = CLM_Lib/optimize.cpp; sourceTree = "<group>"; };
+		F9561C0F1C1FC86000F59699 /* search.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = search.cpp; path = CLM_Lib/search.cpp; sourceTree = "<group>"; };
+		F9561C101C1FC86000F59699 /* svmSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmSearch.cpp; path = CLM_Lib/svmSearch.cpp; sourceTree = "<group>"; };
+		F9561C111C1FC86000F59699 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = CLM_Lib/utils.cpp; sourceTree = "<group>"; };
 		F9561C121C1FC86000F59699 /* CLM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CLM.h; path = CLM_Lib/CLM.h; sourceTree = "<group>"; };
 		F9561C191C1FC99600F59699 /* QuadProg_136.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = QuadProg_136.hh; path = "QuadProg++/QuadProg_136.hh"; sourceTree = "<group>"; };
 		F9561C1A1C1FCC7E00F59699 /* omp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = omp.cpp; sourceTree = "<group>"; };
@@ -147,14 +154,21 @@
 		F9561BEA1C1FC6D100F59699 /* CLM_Lib */ = {
 			isa = PBXGroup;
 			children = (
-				F9561C0B1C1FC86000F59699 /* CLM_LoadModel.cpp */,
-				F9561C0C1C1FC86000F59699 /* CLM_MakeInitial.cpp */,
-				F9561C0D1C1FC86000F59699 /* CLM_Optimize.cpp */,
-				F9561C0E1C1FC86000F59699 /* CLM_priv.h */,
-				F9561C0F1C1FC86000F59699 /* CLM_Search.cpp */,
-				F9561C101C1FC86000F59699 /* CLM_SvmSearch.cpp */,
-				F9561C111C1FC86000F59699 /* CLM_Utils.cpp */,
 				F9561C121C1FC86000F59699 /* CLM.h */,
+				D9B113381C226A5E00D030D2 /* config.h */,
+				D9B113361C2268BA00D030D2 /* structs.h */,
+				F9561C0B1C1FC86000F59699 /* loadModel.cpp */,
+				D9B113311C2266F800D030D2 /* loadModel.h */,
+				F9561C0C1C1FC86000F59699 /* makeInitial.cpp */,
+				D9B113321C22677600D030D2 /* makeInitial.h */,
+				F9561C0D1C1FC86000F59699 /* optimize.cpp */,
+				D9B113331C22679700D030D2 /* optimize.h */,
+				F9561C0F1C1FC86000F59699 /* search.cpp */,
+				D9B113341C22680100D030D2 /* search.h */,
+				F9561C101C1FC86000F59699 /* svmSearch.cpp */,
+				D9B113371C2268F900D030D2 /* svmSearch.h */,
+				F9561C111C1FC86000F59699 /* utils.cpp */,
+				D9B113351C22683500D030D2 /* utils.h */,
 			);
 			name = CLM_Lib;
 			sourceTree = "<group>";
@@ -218,7 +232,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0720;
-				ORGANIZATIONNAME = "Sony Digital Entertainment Services";
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					F9561BD61C1FC50000F59699 = {
 						CreatedOnToolsVersion = 7.2;
@@ -249,19 +263,19 @@
 			files = (
 				F9561C021C1FC6FF00F59699 /* tinyxml.cpp in Sources */,
 				F9561BE61C1FC6B300F59699 /* OpenCV_CLM.cpp in Sources */,
-				F9561C131C1FC86000F59699 /* CLM_LoadModel.cpp in Sources */,
+				F9561C131C1FC86000F59699 /* loadModel.cpp in Sources */,
 				F9561C091C1FC73100F59699 /* QuadProg_3.cc in Sources */,
-				F9561C181C1FC86000F59699 /* CLM_Utils.cpp in Sources */,
+				F9561C181C1FC86000F59699 /* utils.cpp in Sources */,
 				F9561BE71C1FC6B300F59699 /* StdAfx.cpp in Sources */,
 				F9561C1C1C1FCC7E00F59699 /* omp.cpp in Sources */,
-				F9561C151C1FC86000F59699 /* CLM_Optimize.cpp in Sources */,
+				F9561C151C1FC86000F59699 /* optimize.cpp in Sources */,
 				F9561BE51C1FC6B300F59699 /* DrawFace.cpp in Sources */,
-				F9561C161C1FC86000F59699 /* CLM_Search.cpp in Sources */,
-				F9561C171C1FC86000F59699 /* CLM_SvmSearch.cpp in Sources */,
+				F9561C161C1FC86000F59699 /* search.cpp in Sources */,
+				F9561C171C1FC86000F59699 /* svmSearch.cpp in Sources */,
 				F9561C041C1FC6FF00F59699 /* tinyxmlparser.cpp in Sources */,
 				F9561C011C1FC6FF00F59699 /* tinystr.cpp in Sources */,
 				F9561C0A1C1FC73100F59699 /* QuadProg_136.cc in Sources */,
-				F9561C141C1FC86000F59699 /* CLM_MakeInitial.cpp in Sources */,
+				F9561C141C1FC86000F59699 /* makeInitial.cpp in Sources */,
 				F9561C031C1FC6FF00F59699 /* tinyxmlerror.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +405,7 @@
 				F9561BE01C1FC50000F59699 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -14,10 +14,11 @@
 #include "cv.h"
 #include "highgui.h"
 
-#include "clm.h"
-#include "clm_priv.h"
+#include "makeInitial.h"
 
-int CLM_MakeInitialShape(CLM_MODEL& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, CLM_SI& Initial)
+using namespace CLM;
+
+int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, Si& Initial)
 {
 	float maxx = -1000, minx = 1000, maxy = -1000, miny = 1000;
 

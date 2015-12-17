@@ -19,7 +19,9 @@
 #include "cv.h"
 #include "highgui.h"
 
-#include "clm.h"
+#include "CLM.h"
+
+using namespace CLM;
 
 LARGE_INTEGER PerfFreq;
 DWORD CountsPerSec;
@@ -32,7 +34,7 @@ long FrameCount = 0;
 
 IplImage *OrigImg=0, *GrayImg=0, *DispImg = 0;
 
-extern void DrawFaceShape(cv::Mat& image, CvMat *xy);
+extern void drawFaceShape(cv::Mat& image, CvMat *xy);
 
 
 FILE * fpout;
@@ -45,7 +47,7 @@ FILE *fci;
 
 #define WRITE_VIDEO		0
 
-int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
+int pic_vid_main(Model& Model, const char *dirName)
 {
     int key=0;
 	int ret;
@@ -77,28 +79,28 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
     ///////////////////////////
     // Make initial values
     ///////////////////////////    
-	CLM_SI Si_Init, Si_Final;
-	memset(&Si_Init, 0, sizeof(CLM_SI));
-	memset(&Si_Final, 0, sizeof(CLM_SI));
+	Si Si_Init, Si_Final;
+	memset(&Si_Init, 0, sizeof(Si));
+	memset(&Si_Final, 0, sizeof(Si));
 
 	int width = 270;
 	int height = 270;
 
-	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Init);
-	ret = CLM_MakeInitialShape(CLM_Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Final);
+	ret = makeInitialShape(Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Init);
+	ret = makeInitialShape(Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Final);
     
     ////////////////////////
     // Do search with initial guess
     // on the first image.
     ////////////////////////
-	CLM_OPTIONS Options;
+	Options Options;
 	Options.NumInterations = 20;
 	
 	Options.SearchRegion[0] = 16;
 	Options.SearchRegion[1] = 16;
 
-   	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, Options);
-	DrawFaceShape(input, Si_Final.xy);
+   	ret = search(Model, searchimg, Si_Init, Si_Final, Options);
+	drawFaceShape(input, Si_Final.xy);
 
     #if WRITE_VIDEO
     CvVideoWriter *writer = cvCreateVideoWriter("out.avi",-1,25,cvSize(720,576),1);
@@ -117,7 +119,7 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
     while( key != 'q' ) 
 	{
 		i++;
-		CLM_CopySi(Si_Init, Si_Final);
+		copySi(Si_Init, Si_Final);
 		sprintf(imgName, "%s/franck_%05d.jpg", dirName, i);
         input = cvLoadImage(imgName);
         cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
@@ -128,16 +130,16 @@ int pic_vid_main(CLM_MODEL& CLM_Model, const char *dirName)
 		Options.NumInterations = 10;
 		//Options.MaxIterError = 0.015;
     	
-    	ret = CLM_Search(CLM_Model, searchimg, Si_Init, Si_Final, Options);
-		//CLM_DumpSi(&Si_Init);
-		//CLM_DumpSi(&Si_Final);
+    	ret = search(Model, searchimg, Si_Init, Si_Final, Options);
+		//dumpSi(&Si_Init);
+		//dumpSi(&Si_Final);
 		
         QueryPerformanceCounter(&L2);
         float time = (float)(L2.LowPart - L1.LowPart)*1000.0f/CountsPerSec;
         printf("Search time: %4.1f\n ", time);
 
         cv::Mat DispImage_(DispImage);
-		DrawFaceShape(DispImage_, Si_Final.xy);
+		drawFaceShape(DispImage_, Si_Final.xy);
 
         #if WRITE_VIDEO
         cvWriteFrame(writer,DispImage);
@@ -179,9 +181,9 @@ int main(int argc, char **argv) {
     
 	printf("Loading CLM Model file %s ...", xmlFileName);
 
-	CLM_MODEL CLM_Model;
+	Model Model;
 
-    int ret = CLM_LoadModel(xmlFileName, CLM_Model);
+    int ret = loadModel(xmlFileName, Model);
     if(ret)
     {
     	printf("Cannot load %s...\n", xmlFileName);
@@ -200,9 +202,9 @@ int main(int argc, char **argv) {
         Second 1000 images
         http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html
      */
-    auto imagesDir = "/Users/ryohei/Desktop/all-images";
+    auto imagesDir = "/Users/ryohey/Desktop/all-images";
     
-	pic_vid_main(CLM_Model, imagesDir);
+	pic_vid_main(Model, imagesDir);
 
 	/* free memory */
     cvDestroyWindow( OutputWinName );

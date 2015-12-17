@@ -22,22 +22,25 @@
 #include "cv.h"
 #include "highgui.h"
 
-#include "clm.h"
-#include "clm_priv.h"
+#include "utils.h"
+#include "optimize.h"
 
 extern FILE * fpout;
 
 
 #include "QuadProg_136.hh"
 
+using namespace CLM;
 
-static void DumpMat(CvMat * r);
-static void DumpVec(float *vec, int len);
-static void DumpCI(double *ci, int len);
+namespace CLM {
+    void dumpMat(CvMat * r);
+    void dumpVec(float *vec, int len);
+    void dumpCI(double *ci, int len);
+}
 
 extern DWORD CountsPerSec;
 
-float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS& Options)
+float CLM::optimize(Model& Model, Si& Si, float *coeffs, Options& Options)
 {
 	// Step 0: Prepare...
 	int NumX = Model.PatchModel.NumPatches*2;
@@ -209,7 +212,7 @@ float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS& Opt
 	///////////////////////////////////////////////
 	// Step 7, align back to image coordinate.
 	///////////////////////////////////////////////
-	CLM_align_data_inverse(newxy, tform, Model.ShapeModel.NumPtsPerSample, Si.xy->data.fl);
+	alignDataInverse(newxy, tform, Model.ShapeModel.NumPtsPerSample, Si.xy->data.fl);
 
 
 	return 0.0f;
@@ -223,7 +226,7 @@ float CLM_Optimize(CLM_MODEL& Model, CLM_SI& Si, float *coeffs, CLM_OPTIONS& Opt
 // Below are debug functions.
 //////////////////////////////
 extern FILE *fopout;
-static void DumpMat(CvMat * r)
+void CLM::dumpMat(CvMat * r)
 {
 	float *pdat = r->data.fl;
 
@@ -240,7 +243,7 @@ static void DumpMat(CvMat * r)
 }
 
 extern FILE *fcoeffs;
-static void DumpVec(float *vec, int len)
+void CLM::dumpVec(float *vec, int len)
 {
 	for(int i=0;i<len;i++)
 		fprintf(fcoeffs, "%f ", *vec++);
@@ -250,7 +253,7 @@ static void DumpVec(float *vec, int len)
 }
 
 extern FILE *fci;
-static void DumpCI(double *ci, int len)
+void CLM::dumpCI(double *ci, int len)
 {
 	for(int i=0;i<136;i++)
 	{

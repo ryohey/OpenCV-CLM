@@ -22,16 +22,17 @@
 #include "cv.h"
 #include "highgui.h"
 
-#include "clm.h"
-#include "clm_priv.h"
+#include "utils.h"
+#include "svmSearch.h"
 
 #include "QuadProg_3.hh"
 
-static void DumpResponse(CvMat * r);
-static void DumpWeights(CvMat * r);
+static void dumpResponse(CvMat * r);
+static void dumpWeights(CvMat * r);
 
+using namespace CLM;
 
-double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *QuadCoeffs, CLM_OPTIONS& Options)
+double* CLM::svmSearch(Si& Si, Model& pModel, cv::Mat& Image, float *QuadCoeffs, Options& Options)
 {
 	auto& ShapeModel = pModel.ShapeModel;
 	auto& PatchModel = pModel.PatchModel;
@@ -44,7 +45,7 @@ double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *Quad
 	///////////////////////////////////////
 	// Step 1, align current shape to mean shape:
 	///////////////////////////////////////
-	CLM_align_data(Si.xy->data.fl, pMeanShape->data.fl, ShapeModel.NumPtsPerSample, Si.AlignedXY->data.fl, Si.transform);
+	alignData(Si.xy->data.fl, pMeanShape->data.fl, ShapeModel.NumPtsPerSample, Si.AlignedXY->data.fl, Si.transform);
 
 	// Invert transform matrix...
 	float tm[9], invtm[9];
@@ -279,7 +280,7 @@ double* CLM_SvmSearch(CLM_SI& Si, CLM_MODEL& pModel, cv::Mat& Image, float *Quad
 // Below are debug functions.
 //////////////////////////////
 extern FILE *fpresponse;
-static void DumpResponse(CvMat * r)
+void dumpResponse(CvMat * r)
 {
 	float *pdat = r->data.fl;
 
@@ -290,8 +291,9 @@ static void DumpResponse(CvMat * r)
 	fflush(fpresponse);
 
 }
+
 extern FILE *fweights;
-static void DumpWeights(CvMat * r)
+void dumpWeights(CvMat * r)
 {
 	float *pdat = r->data.fl;
 
@@ -300,6 +302,4 @@ static void DumpWeights(CvMat * r)
 
 	fprintf(fweights, "\n");
 	fflush(fweights);
-
 }
-

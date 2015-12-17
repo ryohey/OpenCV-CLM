@@ -20,10 +20,11 @@
 #include "cv.h"
 #include "highgui.h"
 
-#include "clm.h"
-#include "clm_priv.h"
+#include "utils.h"
 
-int CLM_Procrustes0(float *pdat, float *pbase, int numPts)
+using namespace CLM;
+
+int procrustes0(float *pdat, float *pbase, int numPts)
 {
 	int i;
 	float *pdat0 = pdat, *pbase0 = pbase;
@@ -104,7 +105,7 @@ int CLM_Procrustes0(float *pdat, float *pbase, int numPts)
 // pout: pdat aligned to base shape (x1, y1, x2, y2, ... xn, yn);
 // tform: transform from pdat to pbase, [a b dx, b -a dy] stored in [a b dx dy];
 //////////////////////////////////////////////////////////////////
-int CLM_align_data(float *pdat, float *pbase, int numPts, float *pout, float *tform)
+int CLM::alignData(float *pdat, float *pbase, int numPts, float *pout, float *tform)
 {
 	int i;
     float *pdat0 = pdat;
@@ -170,9 +171,7 @@ int CLM_align_data(float *pdat, float *pbase, int numPts, float *pout, float *tf
 	return 0;
 }
 
-
-
-int CLM_align_data_inverse(float *pdat, float *tform, int numPts, float *pout)
+int CLM::alignDataInverse(float *pdat, float *tform, int numPts, float *pout)
 {
 	int i;
 	float tx, ty;
@@ -190,7 +189,7 @@ int CLM_align_data_inverse(float *pdat, float *tform, int numPts, float *pout)
 	return 0;
 }
 
-int CLM_CopySi(CLM_SI& dst, CLM_SI& src)
+int CLM::copySi(Si& dst, Si& src)
 {
 	cvCopy(src.xy, dst.xy);
 	cvCopy(src.
@@ -204,7 +203,7 @@ int CLM_CopySi(CLM_SI& dst, CLM_SI& src)
 	return 0;
 }
 
-int CLM_DumpSi(CLM_SI& si)
+int CLM::dumpSi(Si& si)
 {
 	//printf("center: %d, %d\n", (int)si->center[0], (int)si->center[1]);
 	//printf("rotation: %f, scale: %f\n", si->rotation, si->scale);
@@ -228,14 +227,15 @@ FILE *psi = fopen("si.txt", "w");
 
 
 static SYSTEMTIME start[10];
-int CLM_StartTimer(int i)
+int CLM::startTimer(int i)
 {
 
 	GetSystemTime(&start[i]);	
 	
 	return 0;
 }
-long CLM_StopTimer(int i)
+
+long CLM::stopTimer(int i)
 {
 	SYSTEMTIME now;
 	
