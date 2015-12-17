@@ -40,7 +40,7 @@ int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, doub
 
 	// Copy to homogenous matrix...
 	psrc = pMean->data.fl;
-	int step = Homo.step/sizeof(float);
+	int step = (int)Homo.step/sizeof(float);
 	for (int i=0;i<NumPts; i++)
 	{
 		Homo.at<float>(i) = *(psrc) - meanx;
@@ -87,7 +87,7 @@ int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, doub
 	float rotmdat[9];
 	
     cv::Mat Rotm(3, 3, CV_32FC1, rotmdat);
-	step = Rotm.step/sizeof(float);
+	step = (int)Rotm.step/sizeof(float);
         
     Rotm.at<float>(0) = (float)cos(rot);
     Rotm.at<float>(1) = (float)sin(rot);
@@ -112,7 +112,7 @@ int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, doub
 	Initial.xy = cvCreateMat(NumPts, 2, CV_32FC1);
 	Initial.AlignedXY = cvCreateMat(NumPts, 2, CV_32FC1);
 
-	step = Outxy.step/sizeof(float);
+	step = (int)Outxy.step/sizeof(float);
 
 	auto pdst = Initial.xy->data.fl;
 	
