@@ -15,9 +15,7 @@
 //		June, 2011.
 ////////////////////////////////////////////////////////
 
-#include "cv.h"
-
-#include "CLM.h"
+#include "DrawFace.h"
 
 static int orFace[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 24, 23, 22, 21, 0};
 static int orEbrowL[] = {24, 23, 22, 21, 26, 25, 24};
@@ -26,9 +24,6 @@ static int orEyeL[] = {27, 30, 29, 31, 27, 31, 29, 28, 27};
 static int orEyeR[] = {34, 35, 32, 36, 34, 36, 32, 33, 34};
 static int orNose[] = {37, 38, 39, 40, 46, 41, 47, 42, 43, 44, 45, 37};
 static int orMouth[] = {48, 59, 58, 57, 56, 55, 54, 53, 52, 50, 49, 48, 60, 61, 62, 63, 64, 65, 48};
-
-
-void drawConnected(cv::Mat& image, float *pdat, int step, int *order, int cnt);
 
 void drawFaceShape(cv::Mat& image, CvMat *xy)
 {

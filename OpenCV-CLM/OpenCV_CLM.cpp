@@ -19,19 +19,13 @@
 #include "highgui.h"
 
 #include "CLM.h"
+#include "DrawFace.h"
 
 using namespace CLM;
 
 const static char *OutputWinName = "Constrained Local Model Demo - OpenCV";
 
-long FrameCount = 0;
-
-IplImage *OrigImg=0, *GrayImg=0, *DispImg = 0;
-
-extern void drawFaceShape(cv::Mat& image, CvMat *xy);
-
-
-FILE * fpout;
+FILE *fpout;
 FILE *fpresponse;
 FILE *fopout;
 FILE *fweights;
