@@ -63,10 +63,10 @@ static double scalar_product(double x[], double y[], int n);
 static double distance(double a, double b);
 
 // Utility functions for printing vectors and matrices
-static void print_matrix(char* name, double A[][MATRIX_DIM], int n);
-static void print_rmatrix(char* name, double A[][MATRIX_DIM], int n, int m);
-static void print_vector(char* name, double v[], int n);
-static void print_ivector(char* name, int v[], int n);
+static void print_matrix(const char* name, double A[][MATRIX_DIM], int n);
+static void print_rmatrix(const char* name, double A[][MATRIX_DIM], int n, int m);
+static void print_vector(const char* name, double v[], int n);
+static void print_ivector(const char* name, int v[], int n);
 
 // The Solving function, implementing the Goldfarb-Idnani method
 
@@ -434,8 +434,8 @@ Q3_l2a:/* Step 2a: determine step direction */
 
 static void compute_d(double d[], double J[][MATRIX_DIM], double np[], int n)
 {
-  register int i, j;
-  register double sum;
+  int i, j;
+  double sum;
   
   /* compute d = H^T * np */
 	for (i = 0; i < n; i++)
@@ -449,7 +449,7 @@ static void compute_d(double d[], double J[][MATRIX_DIM], double np[], int n)
 
 static void update_z(double z[], double J[][MATRIX_DIM], double d[], int n, int iq)
 {
-	register int i, j;
+	int i, j;
 	
 	/* setting of z = H * d */
   for (i = 0; i < n; i++)
@@ -462,8 +462,8 @@ static void update_z(double z[], double J[][MATRIX_DIM], double d[], int n, int 
 
 static void update_r(double R[][MATRIX_DIM], double r[], double d[], int n, int iq) 
 {
-	register int i, j;
-	register double sum;
+	int i, j;
+	double sum;
   
   /* setting of r = R^-1 d */
 	for (i = iq - 1; i >= 0; i--)
@@ -619,7 +619,7 @@ static void delete_constraint(double R[][MATRIX_DIM], double J[][MATRIX_DIM], in
 
 static double distance(double a, double b)
 {
-	register double a1, b1, t;
+	double a1, b1, t;
 	a1 = fabs(a);
 	b1 = fabs(b);
 	if (a1 > b1) 
@@ -639,8 +639,8 @@ static double distance(double a, double b)
 
 static double scalar_product(double *x, double *y, int n)
 {
-	register int i;
-	register double sum;
+	int i;
+	double sum;
 	
 	sum = 0.0;
 	for (i = 0; i < n; i++)
@@ -650,8 +650,8 @@ static double scalar_product(double *x, double *y, int n)
 
 static void cholesky_decomposition(double A[][MATRIX_DIM], int n) 
 {
-  register int i, j, k;
-  register double sum;
+  int i, j, k;
+  double sum;
 	
   for (i = 0; i < n; i++)
   {
@@ -690,7 +690,7 @@ static void cholesky_solve(double L[][MATRIX_DIM], double x[], double b[], int n
 
 static void forward_elimination(double L[][MATRIX_DIM], double y[], double b[], int n)
 {
-	register int i, j;
+	int i, j;
 	
 	y[0] = b[0] / L[0][0];
 	for (i = 1; i < n; i++)
@@ -704,7 +704,7 @@ static void forward_elimination(double L[][MATRIX_DIM], double y[], double b[], 
 
 static void backward_elimination(double U[][MATRIX_DIM], double x[], double y[], int n)
 {
-	register int i, j;
+	int i, j;
 	
 	x[n - 1] = y[n - 1] / U[n - 1][n - 1];
 	for (i = n - 2; i >= 0; i--)
@@ -716,7 +716,7 @@ static void backward_elimination(double U[][MATRIX_DIM], double x[], double y[],
 	}
 }
 
-static void print_matrix(char* name, double A[][MATRIX_DIM], int n)
+static void print_matrix(const char* name, double A[][MATRIX_DIM], int n)
 {
 	std::ostringstream s;
 	std::string t;
@@ -734,7 +734,7 @@ static void print_matrix(char* name, double A[][MATRIX_DIM], int n)
   std::cerr << t << std::endl;
 }
 
-static void print_rmatrix(char* name, double A[][MATRIX_DIM], int n, int m)
+static void print_rmatrix(const char* name, double A[][MATRIX_DIM], int n, int m)
 {
 	std::ostringstream s;
 	std::string t;
@@ -753,7 +753,7 @@ static void print_rmatrix(char* name, double A[][MATRIX_DIM], int n, int m)
   std::cerr << t << std::endl;
 }
 
-static void print_vector(char* name, double v[], int n)
+static void print_vector(const char* name, double v[], int n)
 {
 	std::ostringstream s;
 	std::string t;
@@ -769,7 +769,7 @@ static void print_vector(char* name, double v[], int n)
   std::cerr << t << std::endl;
 }
 
-static void print_ivector(char* name, int v[], int n)
+static void print_ivector(const char* name, int v[], int n)
 {
 	std::ostringstream s;
 	std::string t;
