@@ -230,8 +230,7 @@ double* CLM::svmSearch(Si& Si, Model& pModel, cv::Mat& Image, float *QuadCoeffs,
 		g0[2] = p2atrld[2];
 
 		// CI = [-1 0 0; 0 -1 0; 0 0 -1]; ci0 = [0; 0; +inf];
-		double CI[3][3];
-		memset(CI, 0, sizeof(CI));
+        double CI[3][3] = {0};
 		CI[0][0]= -1;
 		CI[1][1] = -1;
 		CI[2][2] = -1;

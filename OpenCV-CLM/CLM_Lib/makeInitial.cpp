@@ -14,7 +14,7 @@
 
 using namespace CLM;
 
-int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, Si& Initial)
+void CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, Si& Initial)
 {
 	float maxx = -1000, minx = 1000, maxy = -1000, miny = 1000;
 
@@ -126,6 +126,4 @@ int CLM::makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, doub
 	Initial.transform[1] = (float)(scf*sin(rot));
 	Initial.transform[2] = centerx;
 	Initial.transform[3] = centery;
-	
-	return 0;
 }

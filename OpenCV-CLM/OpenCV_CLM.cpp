@@ -19,38 +19,77 @@
 #include "highgui.h"
 
 #include "CLM.h"
+#include "DrawFace.h"
 
 using namespace CLM;
 
 const static char *OutputWinName = "Constrained Local Model Demo - OpenCV";
 
-long FrameCount = 0;
-
-IplImage *OrigImg=0, *GrayImg=0, *DispImg = 0;
-
-extern void drawFaceShape(cv::Mat& image, CvMat *xy);
-
-
-FILE * fpout;
+FILE *fpout;
 FILE *fpresponse;
 FILE *fopout;
 FILE *fweights;
 FILE *fcoeffs;
 FILE *fci;
 
+class FaceTracker {
+private:
+    Options options = {};
+    Si Si_Init = {};
+    Si Si_Final = {};
+    Model& model;
+    
+public:
+    FaceTracker(Model& model, cv::Mat& image);
+    Si& update(cv::Mat& image);
+};
+
+FaceTracker::FaceTracker(Model& model, cv::Mat& image) : model(model) {
+    cv::Mat searchimg;
+    cv::cvtColor(image, searchimg, CV_BGR2GRAY, 1);
+    
+    int width = 270;
+    int height = 270;
+    int x0 = 388;
+    int y0= 309;
+    
+    makeInitialShape(model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Init);
+    makeInitialShape(model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Final);
+    
+    options.NumInterations = 20;
+    options.SearchRegion[0] = 16;
+    options.SearchRegion[1] = 16;
+}
+
+Si& FaceTracker::update(cv::Mat& image) {
+    copySi(Si_Init, Si_Final);
+    
+    cv::Mat searchimg;
+    cv::cvtColor(image, searchimg, CV_BGR2GRAY, 1);
+    
+    auto startTime = std::chrono::system_clock::now();
+    
+    options.NumInterations = 10;
+    //Options.MaxIterError = 0.015;
+    
+    search(model, searchimg, Si_Init, Si_Final, options);
+    //dumpSi(&Si_Init);
+    //dumpSi(&Si_Final);
+    
+    auto endTime = std::chrono::system_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+    
+    printf("Search time: %4.1lld\n ", time);
+    
+    return Si_Final;
+}
 
 #define WRITE_VIDEO		0
 
-int pic_vid_main(Model& Model, const char *dirName)
+int pic_vid_main(Model& model, const char *dirName)
 {
-    int key=0;
-	int ret;
-
-	int base = 0;
-	int x0 = 388, y0= 309;
-	int i=base;
 	char imgName[256];
-	sprintf(imgName, "%s/franck_%05d.jpg", dirName, base);
+	sprintf(imgName, "%s/franck_%05d.jpg", dirName, 0);
 	
     cv::Mat input = cv::imread(imgName);
     
@@ -65,91 +104,46 @@ int pic_vid_main(Model& Model, const char *dirName)
     //fweights = fopen("weights.txt", "w");
     //fcoeffs = fopen("coeffs.txt", "w");
 
-    cv::Mat DispImage(input.rows, input.cols, input.depth(), input.channels());
-    cv::Mat searchimg;
-    
-    cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
-
-    ///////////////////////////
-    // Make initial values
-    ///////////////////////////    
-	Si Si_Init, Si_Final;
-	memset(&Si_Init, 0, sizeof(Si));
-	memset(&Si_Final, 0, sizeof(Si));
-
-	int width = 270;
-	int height = 270;
-
-	ret = makeInitialShape(Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Init);
-	ret = makeInitialShape(Model, searchimg, x0-width/2, y0-height/2, width, height, 0, Si_Final);
-    
-    ////////////////////////
-    // Do search with initial guess
-    // on the first image.
-    ////////////////////////
-	Options Options;
-	Options.NumInterations = 20;
-	
-	Options.SearchRegion[0] = 16;
-	Options.SearchRegion[1] = 16;
-
-   	ret = search(Model, searchimg, Si_Init, Si_Final, Options);
-	drawFaceShape(input, Si_Final.xy);
-
     #if WRITE_VIDEO
     CvVideoWriter *writer = cvCreateVideoWriter("out.avi",-1,25,cvSize(720,576),1);
-    #endif
-
-
-    #if WRITE_VIDEO
     cvWriteFrame(writer,input);
     #endif
-    input.copyTo(DispImage);
-    cv::imshow(OutputWinName, DispImage );
+    
+    FaceTracker tracker(model, input);
+    
+    cv::imshow(OutputWinName, input);
 	
     /////////////////////////////////////
     // Now we are ready to do tracking.
     /////////////////////////////////////
-    while( key != 'q' ) 
+    int i = 0;
+    /* exit if user press 'ESC' */
+    while(true)
 	{
 		i++;
-		copySi(Si_Init, Si_Final);
 		sprintf(imgName, "%s/franck_%05d.jpg", dirName, i);
-        input = cvLoadImage(imgName);
-        cv::cvtColor(input, searchimg, CV_BGR2GRAY, 1);
-        input.copyTo(DispImage);
+        auto input = cv::imread(imgName);
+        cv::Mat dispImage;
+        input.copyTo(dispImage);
         
-        auto startTime = std::chrono::system_clock::now();
+        auto& si = tracker.update(input);
 
-		Options.NumInterations = 10;
-		//Options.MaxIterError = 0.015;
-    	
-    	ret = search(Model, searchimg, Si_Init, Si_Final, Options);
-		//dumpSi(&Si_Init);
-		//dumpSi(&Si_Final);
-        
-        auto endTime = std::chrono::system_clock::now();
-        auto time = std::chrono::duration_cast<std::chrono::milliseconds>(startTime - endTime).count();
-
-        printf("Search time: %4.1lld\n ", time);
-
-        cv::Mat DispImage_(DispImage);
-		drawFaceShape(DispImage_, Si_Final.xy);
+		drawFaceShape(dispImage, si.xy);
 
         #if WRITE_VIDEO
         cvWriteFrame(writer,DispImage);
         #endif
 
-        cv::imshow(OutputWinName, DispImage );
+        cv::imshow(OutputWinName, dispImage);
 
-		if(i>=4980)
+        if (i >= 4980) {
             break;
-
-	    /* exit if user press 'q' */
-        key = cvWaitKey( 1 );
+        }
+        
+        if (cv::waitKey(1) == 27) {
+            break;
+        }
     }
-
-	
 
 #if WRITE_VIDEO
     cvReleaseVideoWriter(&writer); 
@@ -171,18 +165,17 @@ int main(int argc, char **argv) {
     
 	printf("Loading CLM Model file %s ...", xmlFileName);
 
-	Model Model;
+	Model model;
 
-    int ret = loadModel(xmlFileName, Model);
+    int ret = loadModel(xmlFileName, model);
     if(ret)
     {
     	printf("Cannot load %s...\n", xmlFileName);
     	exit(0);
     }
 
-	
     /* create a window for the video */
-    cvNamedWindow( OutputWinName, CV_WINDOW_AUTOSIZE );
+    cv::namedWindow(OutputWinName);
     
     /*
      place the all-images directory
@@ -194,10 +187,9 @@ int main(int argc, char **argv) {
      */
     auto imagesDir = "/Users/ryohey/Desktop/all-images";
     
-	pic_vid_main(Model, imagesDir);
-
-	/* free memory */
-    cvDestroyWindow( OutputWinName );
+	pic_vid_main(model, imagesDir);
+    
+    cv::destroyAllWindows();
 
     return 0;
     
