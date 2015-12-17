@@ -67,9 +67,8 @@ int pic_vid_main(Model& Model, const char *dirName)
     ///////////////////////////
     // Make initial values
     ///////////////////////////    
-	Si Si_Init, Si_Final;
-	memset(&Si_Init, 0, sizeof(Si));
-	memset(&Si_Final, 0, sizeof(Si));
+    Si Si_Init = {};
+    Si Si_Final = {};
 
 	int width = 270;
 	int height = 270;
