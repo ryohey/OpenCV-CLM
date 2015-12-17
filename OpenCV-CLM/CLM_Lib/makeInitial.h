@@ -12,7 +12,7 @@
 #include "structs.h"
 
 namespace CLM {
-    int makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, Si& Initial);
+    void makeInitialShape(Model& Model, cv::Mat& Image, double x, double y, double w, double h, double rot, Si& Initial);
 }
 
 #endif /* makeInitial_h */

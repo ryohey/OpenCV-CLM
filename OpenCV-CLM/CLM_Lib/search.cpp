@@ -29,7 +29,7 @@ namespace CLM {
     void dumpResponse(CvMat * r);
 }
 
-int CLM::search(Model& Model, cv::Mat& Image, Si& Initial, Si& Final, Options& Options)
+void CLM::search(Model& Model, cv::Mat& Image, Si& Initial, Si& Final, Options& Options)
 {
 	// Prepare:
 	auto Inter = Initial;
@@ -56,7 +56,5 @@ int CLM::search(Model& Model, cv::Mat& Image, Si& Initial, Si& Final, Options& O
 	// Clean up: ... should make Si a class...
 	cvReleaseMat(&Inter.xy);
 	cvReleaseMat(&Inter.AlignedXY);
-
-	return 0;
 }
 

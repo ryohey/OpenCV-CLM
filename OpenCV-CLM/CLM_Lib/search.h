@@ -12,7 +12,7 @@
 #include "structs.h"
 
 namespace CLM {
-    int search(Model& Model, cv::Mat& Image, Si& Initial, Si& Final, Options& Options);
+    void search(Model& Model, cv::Mat& Image, Si& Initial, Si& Final, Options& Options);
 }
 
 #endif /* search_h */
